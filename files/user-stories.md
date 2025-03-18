@@ -236,3 +236,19 @@ As a user, I want to unsubscribe from the mailing list so that I stop receiving 
 ### Estimation:
 
 **1** hour
+
+---
+
+## 14. Persistently Store Emails and Diff Reports
+
+As an admin, I want to be able to persistently store emais of subscribed users and generated diff reports.
+
+### Acceptance Criteria:
+
+- Every successfully generated diff report will be stored in a persistent storage.
+- Every email of a subscribed user is stored in a persistent storage.
+- Emails and diff reports share the persistent storage.
+
+### Estimation:
+
+**4** hours
