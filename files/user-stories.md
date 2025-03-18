@@ -107,16 +107,31 @@ As an admin, I want to click a button to generate the latest diff report so that
 ### Acceptance Criteria:
 
 - Clicking the button triggers the CSV download and diff processing.
-- The diff report is automatically emailed to clients.
 - Processing time is reasonable.
 
 ### Estimation:
 
-**13** hours
+**7** hours
 
 ---
 
-## 7. Show Success or Failure Message
+## 7. Notify Clients About New Diff Report
+
+As an admin, I want to send automatic emails whenever I generate new diff report.
+
+### Acceptance Criteria:
+
+- Once completed, an email is sent to every subscribed user.
+- Email contains a message notifying user that a new diff report was generated, not the diff report itself.
+- Clients are notified in a reasonable time.
+
+### Estimation:
+
+**6** hours
+
+---
+
+## 8. Show Success or Failure Message
 
 As an admin, I want to see feedback after generating a report so that I know if it was successful.
 
@@ -136,7 +151,7 @@ As an admin, I want to see feedback after generating a report so that I know if 
 
 ---
 
-## 8. Restrict Report Generation to Admins
+## 9. Restrict Report Generation to Admins
 
 As an admin, I want report generation restricted to admins so that only authorized users can generate reports.
 
@@ -156,7 +171,7 @@ As an admin, I want report generation restricted to admins so that only authoriz
 
 ---
 
-## 9. Search for Closest Past Report by Date
+## 10. Search for Closest Past Report by Date
 
 As an admin, I want to enter a date and retrieve the closest available past report so that I can review previous data.
 
@@ -172,7 +187,7 @@ As an admin, I want to enter a date and retrieve the closest available past repo
 
 ---
 
-## 10. Download Past Report
+## 11. Download Past Report
 
 As an admin, I want to download a past report so that I can analyze it offline.
 
@@ -187,7 +202,7 @@ As an admin, I want to download a past report so that I can analyze it offline.
 
 ---
 
-## 11. Subscribe to Mailing List
+## 12. Subscribe to Mailing List
 
 As a user, I want to subscribe to the mailing list so that I receive report updates.
 
@@ -203,7 +218,7 @@ As a user, I want to subscribe to the mailing list so that I receive report upda
 
 ---
 
-## 12. Unsubscribe from Mailing List
+## 13. Unsubscribe from Mailing List
 
 As a user, I want to unsubscribe from the mailing list so that I stop receiving report updates.
 
