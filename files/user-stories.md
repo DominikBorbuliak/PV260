@@ -130,7 +130,7 @@ As an admin, I want to send automatic emails whenever I generate new diff report
 
 ### Estimation:
 
-**6** hours
+**5** hours
 
 ---
 
@@ -234,4 +234,4 @@ As an admin, I want to be able to persistently store emais of subscribed users a
 
 ### Estimation:
 
-**4** hours
+**5** hours
