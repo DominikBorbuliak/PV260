@@ -108,10 +108,13 @@ As an admin, I want to click a button to generate the latest diff report so that
 
 - Clicking the button triggers the CSV download and diff processing.
 - Processing time is reasonable.
+- Success message is shown if the report completes successfully.
+- Error message is displayed if the process fails.
+- Error message provides details (e.g., missing data, API failure).
 
 ### Estimation:
 
-**7** hours
+**8** hours
 
 ---
 
@@ -127,31 +130,11 @@ As an admin, I want to send automatic emails whenever I generate new diff report
 
 ### Estimation:
 
-**6** hours
+**5** hours
 
 ---
 
-## 8. Show Success or Failure Message
-
-As an admin, I want to see feedback after generating a report so that I know if it was successful.
-
-### Acceptance Criteria:
-
-- A success message is shown if the report generation is completed.
-- An error message is displayed if the process fails.
-- The message provides details about the error (e.g., missing data, API failure).
-
-### Out of Scope:
-
-- Detailed logging of report processing steps.
-
-### Estimation:
-
-**1** hour
-
----
-
-## 9. Restrict Report Generation to Admins
+## 8. Restrict Report Generation to Admins
 
 As an admin, I want report generation restricted to admins so that only authorized users can generate reports.
 
@@ -171,7 +154,7 @@ As an admin, I want report generation restricted to admins so that only authoriz
 
 ---
 
-## 10. Search for Closest Past Report by Date
+## 9. Search for Closest Past Report by Date
 
 As an admin, I want to enter a date and retrieve the closest available past report so that I can review previous data.
 
@@ -187,7 +170,7 @@ As an admin, I want to enter a date and retrieve the closest available past repo
 
 ---
 
-## 11. Download Past Report
+## 10. Download Past Report
 
 As an admin, I want to download a past report so that I can analyze it offline.
 
@@ -202,7 +185,7 @@ As an admin, I want to download a past report so that I can analyze it offline.
 
 ---
 
-## 12. Subscribe to Mailing List
+## 11. Subscribe to Mailing List
 
 As a user, I want to subscribe to the mailing list so that I receive report updates.
 
@@ -218,7 +201,7 @@ As a user, I want to subscribe to the mailing list so that I receive report upda
 
 ---
 
-## 13. Unsubscribe from Mailing List
+## 12. Unsubscribe from Mailing List
 
 As a user, I want to unsubscribe from the mailing list so that I stop receiving report updates.
 
@@ -239,7 +222,7 @@ As a user, I want to unsubscribe from the mailing list so that I stop receiving 
 
 ---
 
-## 14. Persistently Store Emails and Diff Reports
+## 13. Persistently Store Emails and Diff Reports
 
 As an admin, I want to be able to persistently store emais of subscribed users and generated diff reports.
 
@@ -251,4 +234,4 @@ As an admin, I want to be able to persistently store emais of subscribed users a
 
 ### Estimation:
 
-**4** hours
+**5** hours
