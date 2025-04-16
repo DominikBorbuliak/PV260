@@ -22,4 +22,12 @@
     </ProjectReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\school\10_semester\pv260\PV260\PV260.Project\PV260.Project.Server\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="D:\school\10_semester\pv260\PV260\PV260.Project\PV260.Project.Server\.editorconfig" />
+  </ItemGroup>
+
 </Project>
