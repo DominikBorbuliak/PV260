@@ -55,6 +55,9 @@ jobs:
       - name: Build with dotnet
         run: dotnet build ./PV260.Project/PV260.Project.sln --configuration Release
 
+      - name: Test
+        run: ls
+
       - name: Move files
         run: mv ./PV260.Project/dist ${{env.DOTNET_ROOT}}/myapp/wwwrooot
 
