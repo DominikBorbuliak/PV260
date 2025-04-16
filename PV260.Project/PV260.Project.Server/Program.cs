@@ -27,6 +27,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapFallbackToFile("/wwwroot/index.html");
+app.MapFallbackToFile("/index.html");
 
 app.Run();
