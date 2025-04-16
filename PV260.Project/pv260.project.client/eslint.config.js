@@ -13,7 +13,7 @@ export default tseslint.config(
       'dist',
       'eslint.config.js',
       'vite.config.ts',
-      'src/components/ui/**/*', // TODO: Check this ignore once shadcn is used
+      'src/components/ui/**/*',
       '**/_generatedClient/*',
     ],
   },
