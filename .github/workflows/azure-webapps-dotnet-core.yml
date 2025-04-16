@@ -52,8 +52,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - name: Build FE
-        run: cd ./PV260.Project/pv260.project.client & npm run build
+      - name: Test
+        run: ls ./PV260.Project/pv260.project.client
 
       - name: Build with dotnet
         run: dotnet build ./PV260.Project/PV260.Project.sln --configuration Release
