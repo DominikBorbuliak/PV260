@@ -59,7 +59,7 @@ jobs:
         run: dotnet publish ./PV260.Project/PV260.Project.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Move files
-        run: mv ./PV260.Project/pv260.project.client/dist ${{env.DOTNET_ROOT}}/myapp/wwwrooot
+        run: mv ./PV260.Project/pv260.project.client/dist ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
