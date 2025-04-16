@@ -53,10 +53,10 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Build with dotnet
-        run: dotnet build ./PV260.ProjectPV260.Project.sln --configuration Release
+        run: dotnet build ./PV260.Project/PV260.Project.sln --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish ./PV260.ProjectPV260.Project.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish ./PV260.Project/PV260.Project.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
