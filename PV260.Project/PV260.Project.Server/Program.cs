@@ -1,3 +1,5 @@
+using PV260.Project.Server.Middlewares;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,6 +18,8 @@ if (app.Environment.IsDevelopment())
 {
     _ = app.MapOpenApi();
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
