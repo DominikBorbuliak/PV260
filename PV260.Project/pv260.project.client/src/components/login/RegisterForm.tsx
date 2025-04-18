@@ -1,12 +1,5 @@
 import { useForm } from 'react-hook-form';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '../ui/form';
+import { Form, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
@@ -15,6 +8,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { register } from '@/services/api/auth';
 import { Separator } from '@radix-ui/react-separator';
+import { FormField } from '../form/Field';
 
 const registerFormSchema = z.object({
   email: z.string().refine((value) => value.match(/.+@.+/), {
@@ -70,29 +64,15 @@ export const RegisterForm = () => {
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
-            control={form.control}
             name="email"
-            render={({ field: { ref: _, ...field } }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder="Email Address" type="email" {...field} />
-                </FormControl>
-                <FormMessage className="text-xs" />
-              </FormItem>
+            renderControl={(field) => (
+              <Input placeholder="Email Address" type="email" {...field} />
             )}
           />
           <FormField
-            control={form.control}
             name="password"
-            render={({ field: { ref: _, ...field } }) => (
-              <FormItem className="mt-2">
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input placeholder="Password" type="password" {...field} />
-                </FormControl>
-                <FormMessage className="text-xs" />
-              </FormItem>
+            renderControl={(field) => (
+              <Input placeholder="Password" type="password" {...field} />
             )}
           />
 
@@ -102,7 +82,11 @@ export const RegisterForm = () => {
             </FormMessage>
           )}
 
-          <Button type="submit" className="my-2">
+          <Button
+            type="submit"
+            className="my-2"
+            disabled={registerMutation.isPending}
+          >
             Register
           </Button>
         </form>
