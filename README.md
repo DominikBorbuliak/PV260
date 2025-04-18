@@ -14,3 +14,15 @@
 
 - You can access api client via ApiClient instance
 - Instance is exported in `~/src/services/api/base.ts` as `apiClient`
+
+## Migrations
+
+Run these from the _PV260.Project/_ directory.
+
+Add new migration:
+
+`dotnet ef migrations add <MigrationName> -s .\PV260.Project.Server\ -p .\PV260.Project.DataAccessLayer\`
+
+Update the database:
+
+`dotnet ef database update -s .\PV260.Project.Server\ -p .\PV260.Project.DataAccessLayer\`
