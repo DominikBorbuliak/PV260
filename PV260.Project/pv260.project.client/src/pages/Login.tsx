@@ -1,7 +1,12 @@
+import { LoginForm } from '@/components/login/LoginForm';
 import { FC } from 'react';
 
 const LoginPage: FC = () => {
-  return <h1>Login page!</h1>;
+  return (
+    <main className="flex items-center justify-center pt-8">
+      <LoginForm />
+    </main>
+  );
 };
 
 export default LoginPage;

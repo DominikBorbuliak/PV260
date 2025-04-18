@@ -10,7 +10,7 @@ interface AuthorizeViewProps {
   children: React.ReactNode;
 }
 
-export const AuthorizeView: FC<AuthorizeViewProps> = ({ children }) => {
+export const AuthorizedView: FC<AuthorizeViewProps> = ({ children }) => {
   const {
     data: userData,
     isLoading,
