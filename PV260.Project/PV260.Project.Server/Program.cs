@@ -14,7 +14,7 @@ IConfigurationRoot configuration = new ConfigurationBuilder()
     .AddJsonFile($"appsettings.{envName}.json", optional: true, reloadOnChange: true)
     .Build();
 
-string sqliteConnectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
+string sqliteConnectionString = configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
 
 // Add services to the container.
 builder.Services.AddDbContextFactory<AppDbContext>(options =>
