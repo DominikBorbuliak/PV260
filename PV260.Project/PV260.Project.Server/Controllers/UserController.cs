@@ -5,6 +5,7 @@ using PV260.Project.DataAccessLayer.Models;
 using System.Security.Claims;
 
 namespace PV260.Project.Server.Controllers;
+
 public class UserController : ApiController
 {
     private readonly SignInManager<User> _signInManager;

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PV260.Project.DataAccessLayer.Models;
 
 namespace PV260.Project.DataAccessLayer.Data;
+
 public class AppDbContext : IdentityDbContext<User, Role, string>
 {
     public override DbSet<User> Users { get; set; }
