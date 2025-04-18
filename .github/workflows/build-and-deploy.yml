@@ -1,0 +1,76 @@
+name: Build and deploy
+
+env:
+  AZURE_WEBAPP_NAME: app-pv260 
+  AZURE_WEBAPP_PACKAGE_PATH: '.'
+  DOTNET_VERSION: '9'
+
+on:
+  push:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up .NET version
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Set up dependency caching for faster builds
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: dotnet build
+        run: dotnet build ./PV260.Project/PV260.Project.sln --configuration Release
+
+      - name: dotnet publish
+        run: dotnet publish ./PV260.Project/PV260.Project.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+      - name: Move FE files to publish folder
+        run: mv ./PV260.Project/pv260.project.client/dist ${{env.DOTNET_ROOT}}/myapp/wwwroot
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
+
+  deploy:
+    permissions:
+      contents: none
+      
+    runs-on: ubuntu-latest
+    
+    needs: build
+    
+    environment:
+      name: 'Development'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-app
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "lint": "eslint . --max-warnings 0",
     "preview": "vite preview",
     "fetch:apidef": "curl -o src/apidef.json https://localhost:7149/openapi/v1.json",
     "generate:client": "openapi -i src/apidef.json -o src/_generatedClient --client axios --name ApiClient --useOptions"

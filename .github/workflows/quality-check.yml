@@ -1,0 +1,61 @@
+name: Quality check
+
+env:
+  DOTNET_VERSION: '9'
+  NODE_VERSION: '20'
+
+on:
+  pull_request:
+    branches: [ "dev" ]
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up .NET version
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Set up dependency caching for faster builds
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: dotnet build
+        run: dotnet build ./PV260.Project/PV260.Project.sln --configuration Release
+
+  frontend:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js version
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: npm install
+        run: npm install
+        working-directory: './PV260.Project/pv260.project.client'
+
+      - name: npm run lint
+        run: npm run lint
+        working-directory: './PV260.Project/pv260.project.client'
+
+      - name: npm run build
+        run: npm run build
+        working-directory: './PV260.Project/pv260.project.client'
+        
