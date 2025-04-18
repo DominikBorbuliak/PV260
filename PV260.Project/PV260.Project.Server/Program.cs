@@ -6,15 +6,7 @@ using PV260.Project.Server.Middlewares;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-string envName = builder.Environment.EnvironmentName;
-
-IConfigurationRoot configuration = new ConfigurationBuilder()
-    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-    .AddJsonFile("appsettings.json")
-    .AddJsonFile($"appsettings.{envName}.json", optional: true, reloadOnChange: true)
-    .Build();
-
-string sqliteConnectionString = configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
+string sqliteConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
 
 // Add services to the container.
 builder.Services.AddDbContextFactory<AppDbContext>(options =>
