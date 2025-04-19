@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Navbar } from '@/components/navbar.tsx';
-import { DatePicker, DatePickerProps } from 'antd';
+import { DatePicker } from 'antd';
 import Footer from '@/components/footer.tsx';
 
 const HomePage: FC = () => {
@@ -14,10 +14,6 @@ const HomePage: FC = () => {
   const logoutMutation = useMutation({
     mutationFn: logOut,
   });
-
-  const onChange: DatePickerProps['onChange'] = (date, dateString) => {
-    console.log(date, dateString);
-  };
 
   return (
     <AuthorizedView>
@@ -40,7 +36,7 @@ const HomePage: FC = () => {
         <div className="mt-10">
           <div className="grow bg-muted flex justify-end py-6 rounded-xl">
             <div className="mx-2">
-              <DatePicker onChange={onChange} />
+              <DatePicker />
             </div>
             <Button className="mx-2">Update Data </Button>
             <div className="h-[600px]" />
