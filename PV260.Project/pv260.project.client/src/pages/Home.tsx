@@ -5,6 +5,9 @@ import { logOut } from '@/services/api/auth';
 import { useMutation } from '@tanstack/react-query';
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Navbar } from '@/components/navbar.tsx';
+import { DatePicker } from 'antd';
+import Footer from '@/components/footer.tsx';
 
 const HomePage: FC = () => {
   const navigate = useNavigate();
@@ -13,8 +16,10 @@ const HomePage: FC = () => {
   });
 
   return (
-    <>
-      <AuthorizedView>
+    <AuthorizedView>
+      <div className="container mx-auto">
+        <Navbar />
+
         <h1>
           Hello world <AuthorizedUser value="email" />!
         </h1>
@@ -28,8 +33,18 @@ const HomePage: FC = () => {
         >
           Log out
         </Button>
-      </AuthorizedView>
-    </>
+        <div className="mt-10">
+          <div className="grow bg-muted flex justify-end py-6 rounded-xl">
+            <div className="mx-2">
+              <DatePicker />
+            </div>
+            <Button className="mx-2">Update Data </Button>
+            <div className="h-[600px]" />
+          </div>
+        </div>
+        <Footer />
+      </div>
+    </AuthorizedView>
   );
 };
 
