@@ -7,5 +7,5 @@ public class ArkFundsApiOptions
     public required string HttpClientKey { get; set; }
     public required string BaseUrl { get; set; }
     public required ArkFundsApiSymbols Symbols { get; set; }
-    public required ArkFundsApiEndpoins Endpoints { get; set; }
+    public required ArkFundsApiEndpoints Endpoints { get; set; }
 }
