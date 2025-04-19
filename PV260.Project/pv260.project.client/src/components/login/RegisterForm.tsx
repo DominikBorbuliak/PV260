@@ -18,7 +18,7 @@ const registerFormSchema = z.object({
     .string()
     .min(6, 'Password must be at least 6 characters.')
     .refine((password) => password.match(/[@#$%*!?;.]/), {
-      message: 'Password must contain at least one spacial character.',
+      message: 'Password must contain at least one special character.',
     })
     .refine((password) => password.match(/[0-9]/), {
       message: 'Password must contain at least one digit.',
