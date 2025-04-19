@@ -9,3 +9,19 @@ export { BaseHttpRequest } from './core/BaseHttpRequest';
 export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
+
+export type { AccessTokenResponse } from './models/AccessTokenResponse';
+export type { ForgotPasswordRequest } from './models/ForgotPasswordRequest';
+export type { HttpValidationProblemDetails } from './models/HttpValidationProblemDetails';
+export type { InfoRequest } from './models/InfoRequest';
+export type { InfoResponse } from './models/InfoResponse';
+export type { LoginRequest } from './models/LoginRequest';
+export type { RefreshRequest } from './models/RefreshRequest';
+export type { RegisterRequest } from './models/RegisterRequest';
+export type { ResendConfirmationEmailRequest } from './models/ResendConfirmationEmailRequest';
+export type { ResetPasswordRequest } from './models/ResetPasswordRequest';
+export type { TwoFactorRequest } from './models/TwoFactorRequest';
+export type { TwoFactorResponse } from './models/TwoFactorResponse';
+
+export { Pv260ProjectServerService } from './services/Pv260ProjectServerService';
+export { UserService } from './services/UserService';

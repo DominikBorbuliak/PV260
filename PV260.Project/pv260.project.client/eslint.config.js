@@ -67,6 +67,12 @@ export default tseslint.config(
           argsIgnorePattern: '^_',
         },
       ],
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+        },
+      ],
       'prefer-arrow-functions/prefer-arrow-functions': [
         'warn',
         {
