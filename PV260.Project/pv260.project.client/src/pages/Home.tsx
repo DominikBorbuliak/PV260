@@ -40,7 +40,6 @@ const HomePage: FC = () => {
         <div className="mt-10">
           <div className="grow bg-muted flex justify-end py-6 rounded-xl">
             <div className="mx-2">
-              {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
               <DatePicker onChange={onChange} />
             </div>
             <Button className="mx-2">Update Data </Button>
