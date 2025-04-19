@@ -8,9 +8,9 @@ namespace PV260.Project.Server.Controllers;
 
 public class UserController : ApiController
 {
-    private readonly SignInManager<User> _signInManager;
+    private readonly SignInManager<UserEntity> _signInManager;
 
-    public UserController(SignInManager<User> signInManager)
+    public UserController(SignInManager<UserEntity> signInManager)
     {
         _signInManager = signInManager;
     }

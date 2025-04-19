@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PV260.Project.Server", "PV2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PV260.Project.DataAccessLayer", "PV260.Project.DataAccessLayer\PV260.Project.DataAccessLayer.csproj", "{8EA37E3E-B350-49A2-95C5-4D5EDC1B4612}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PV260.Project.BusinessLayer", "PV260.Project.BusinessLayer\PV260.Project.BusinessLayer.csproj", "{0426BBCD-B9DB-4124-9F85-B679819C4B59}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{8EA37E3E-B350-49A2-95C5-4D5EDC1B4612}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EA37E3E-B350-49A2-95C5-4D5EDC1B4612}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EA37E3E-B350-49A2-95C5-4D5EDC1B4612}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0426BBCD-B9DB-4124-9F85-B679819C4B59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0426BBCD-B9DB-4124-9F85-B679819C4B59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0426BBCD-B9DB-4124-9F85-B679819C4B59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0426BBCD-B9DB-4124-9F85-B679819C4B59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

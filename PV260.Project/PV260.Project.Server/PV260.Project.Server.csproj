@@ -21,10 +21,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PV260.Project.BusinessLayer\PV260.Project.BusinessLayer.csproj" />
     <ProjectReference Include="..\pv260.project.client\pv260.project.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\PV260.Project.DataAccessLayer\PV260.Project.DataAccessLayer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Dtos\" />
+    <Folder Include="Mappers\" />
   </ItemGroup>
 
 </Project>

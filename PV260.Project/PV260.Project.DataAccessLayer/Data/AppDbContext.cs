@@ -4,9 +4,9 @@ using PV260.Project.DataAccessLayer.Models;
 
 namespace PV260.Project.DataAccessLayer.Data;
 
-public class AppDbContext : IdentityDbContext<User, Role, string>
+public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, string>
 {
-    public override DbSet<User> Users { get; set; }
+    public override DbSet<UserEntity> Users { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
