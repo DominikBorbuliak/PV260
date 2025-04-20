@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using PV260.Project.BusinessLayer.Exceptions;
 using PV260.Project.BusinessLayer.Interfaces.DataAccessLayer;
 using PV260.Project.BusinessLayer.Models;
 using PV260.Project.BusinessLayer.Options.ArkFundsApi;
@@ -25,7 +26,7 @@ public class ArkFundsApiRepository : IArkFundsApiRepository
     {
         if (_httpClient.BaseAddress == null)
         {
-            throw new Exception("Base address is not set for ARK funds API.");
+            throw new ConfigurationException("Base address is not set for ARK funds API.");
         }
 
         var uriBuilder = new UriBuilder(_httpClient.BaseAddress)

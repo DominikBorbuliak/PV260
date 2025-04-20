@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using PV260.Project.BusinessLayer.Exceptions;
 using PV260.Project.BusinessLayer.Interfaces.DataAccessLayer;
 using PV260.Project.BusinessLayer.Options.ArkFundsApi;
 using PV260.Project.DataAccessLayer.Data;
@@ -12,7 +13,7 @@ public static class WebApplicationBuilderExtensions
     public static WebApplicationBuilder ConfigureDatabase(this WebApplicationBuilder builder)
     {
         string sqliteConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-            ?? throw new Exception("Invalid application configuration.");
+            ?? throw new ConfigurationException("Invalid application configuration.");
 
         _ = builder.Services.AddDbContextFactory<AppDbContext>(options =>
         {
@@ -86,7 +87,7 @@ public static class WebApplicationBuilderExtensions
         ArkFundsApiOptions arksFundsApiOptions = builder.Configuration
             .GetSection(ArkFundsApiOptions.Key)
             .Get<ArkFundsApiOptions>()
-            ?? throw new Exception("Invalid application configuration.");
+            ?? throw new ConfigurationException("Invalid application configuration.");
 
         _ = builder.Services.AddHttpClient(arksFundsApiOptions.HttpClientKey, client =>
         {
