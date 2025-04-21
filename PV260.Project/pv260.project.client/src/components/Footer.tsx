@@ -11,7 +11,7 @@ const Footer = () => {
             <div className="my-auto">
               {/* Logo */}
 
-              <img src="https://shadcnblocks.com/images/block/logos/shadcnblockscom-icon.svg" alt="Shadcnblocks Logo"
+              <img src="https://www.em.muni.cz/cache-thumbs/logo_muni_web-1580x790-2008259181.jpg" alt="Logo"
                    width="40" height="40" />
             </div>
             {/* Subscribe Newsletter */}

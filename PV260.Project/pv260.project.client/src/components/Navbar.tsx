@@ -22,6 +22,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { useContext } from 'react';
+import { UserContext } from '@/contexts/UserContext.tsx';
+import { Link, useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import { logOut } from '@/services/api/auth.ts';
 
 interface MenuItem {
   title: string;
@@ -31,7 +36,7 @@ interface MenuItem {
   items?: MenuItem[];
 }
 
-interface Navbar1Props {
+interface NavbarProps {
   logo?: {
     url: string;
     src: string;
@@ -54,16 +59,30 @@ interface Navbar1Props {
 const Navbar = ({
                   logo = {
                     url: '/',
-                    src: 'https://shadcnblocks.com/images/block/logos/shadcnblockscom-icon.svg',
+                    src: 'https://www.em.muni.cz/cache-thumbs/logo_muni_web-1580x790-2008259181.jpg',
                     alt: 'logo',
-                    title: 'Shadcnblocks.com',
+                    title: 'SW Quality',
                   },
                   menu = [],
                   auth = {
                     login: { title: 'Login', url: '/login' },
-                    signup: { title: 'Sign up', url: '/signup' },
+                    signup: { title: 'Register', url: '/register' },
                   },
-                }: Navbar1Props) => {
+                }: NavbarProps) => {
+
+  const user = useContext(UserContext);
+  const navigate = useNavigate();
+
+
+  const logoutMutation = useMutation({
+    mutationFn: logOut,
+    onSuccess: () => navigate('/login'),
+  });
+
+  const handleLogout = () => {
+    logoutMutation.mutate();
+  };
+
   return (
     <section className="py-4">
       <div className=" mx-auto">
@@ -71,12 +90,12 @@ const Navbar = ({
         <nav className="hidden justify-between lg:flex ">
           <div className="flex items-center gap-6">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-2">
+            <Link to={logo.url} className="flex items-center gap-2">
               <img src={logo.src} className="max-h-8" alt={logo.alt} />
               <span className="text-lg font-semibold tracking-tighter">
                 {logo.title}
               </span>
-            </a>
+            </Link>
             <div className="flex items-center">
               <NavigationMenu>
                 <NavigationMenuList>
@@ -86,12 +105,20 @@ const Navbar = ({
             </div>
           </div>
           <div className="flex gap-2">
-            <Button asChild variant="outline" size="sm">
-              <a href={auth.login.url}>{auth.login.title}</a>
-            </Button>
-            <Button asChild size="sm">
-              <a href={auth.signup.url}>{auth.signup.title}</a>
-            </Button>
+            {user ? (
+              <Button variant="outline" size="sm" onClick={handleLogout}>
+                Log out
+              </Button>
+            ) : (
+              <>
+                <Button asChild variant="outline" size="sm">
+                  <Link to={auth.login.url}>{auth.login.title}</Link>
+                </Button>
+                <Button asChild size="sm">
+                  <Link to={auth.signup.url}>{auth.signup.title}</Link>
+                </Button>
+              </>
+            )}
           </div>
         </nav>
 
@@ -99,9 +126,9 @@ const Navbar = ({
         <div className="block lg:hidden">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-2">
+            <Link to={logo.url} className="flex items-center gap-2">
               <img src={logo.src} className="max-h-8" alt={logo.alt} />
-            </a>
+            </Link>
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="outline" size="icon">
@@ -111,9 +138,9 @@ const Navbar = ({
               <SheetContent className="overflow-y-auto">
                 <SheetHeader>
                   <SheetTitle>
-                    <a href={logo.url} className="flex items-center gap-2">
+                    <Link to={logo.url} className="flex items-center gap-2">
                       <img src={logo.src} className="max-h-8" alt={logo.alt} />
-                    </a>
+                    </Link>
                   </SheetTitle>
                 </SheetHeader>
                 <div className="flex flex-col gap-6 p-4">
@@ -127,10 +154,10 @@ const Navbar = ({
 
                   <div className="flex flex-col gap-3">
                     <Button asChild variant="outline">
-                      <a href={auth.login.url}>{auth.login.title}</a>
+                      <Link to={auth.login.url}>{auth.login.title}</Link>
                     </Button>
                     <Button asChild>
-                      <a href={auth.signup.url}>{auth.signup.title}</a>
+                      <Link to={auth.signup.url}>{auth.signup.title}</Link>
                     </Button>
                   </div>
                 </div>
@@ -188,17 +215,17 @@ const renderMobileMenuItem = (item: MenuItem) => {
   }
 
   return (
-    <a key={item.title} href={item.url} className="text-md font-semibold">
+    <Link key={item.title} to={item.url} className="text-md font-semibold">
       {item.title}
-    </a>
+    </Link>
   );
 };
 
 const SubMenuLink = ({ item }: { item: MenuItem }) => {
   return (
-    <a
+    <Link
       className="flex flex-row gap-4 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none hover:bg-muted hover:text-accent-foreground"
-      href={item.url}
+      to={item.url}
     >
       <div className="text-foreground">{item.icon}</div>
       <div>
@@ -209,7 +236,7 @@ const SubMenuLink = ({ item }: { item: MenuItem }) => {
           </p>
         )}
       </div>
-    </a>
+    </Link>
   );
 };
 
