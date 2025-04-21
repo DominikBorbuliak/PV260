@@ -16,9 +16,9 @@ export const AuthorizedView: FC<AuthorizeViewProps> = ({ children }) => {
     isError,
     error,
   } = useQuery<UserDto, ApiError>({
-    queryKey: ['pingauth'],
+    queryKey: ['me'],
     queryFn: async () => {
-      return await apiClient.user.pingauth();
+      return await apiClient.user.getMe();
     },
     retry: 1,
     retryDelay: 500,

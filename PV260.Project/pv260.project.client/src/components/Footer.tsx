@@ -11,11 +11,11 @@ const Footer = () => {
 
   const toggleSubscribeMutation = useMutation({
     mutationFn: async () => {
-      await apiClient.user.toggleIsSubscribed();
+      await apiClient.user.toggleSubscription();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['pingauth'],
+        queryKey: ['me'],
       });
     },
   });

@@ -21,20 +21,20 @@ export class UserService {
      * @returns UserDto OK
      * @throws ApiError
      */
-    public pingauth(): CancelablePromise<UserDto> {
+    public getMe(): CancelablePromise<UserDto> {
         return this.httpRequest.request({
             method: 'GET',
-            url: '/api/User/pingauth',
+            url: '/api/User/me',
         });
     }
     /**
      * @returns any OK
      * @throws ApiError
      */
-    public toggleIsSubscribed(): CancelablePromise<any> {
+    public toggleSubscription(): CancelablePromise<any> {
         return this.httpRequest.request({
             method: 'PATCH',
-            url: '/api/User/toggleIsSubscribed',
+            url: '/api/User/subscribtion',
         });
     }
 }

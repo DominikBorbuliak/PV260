@@ -367,12 +367,12 @@
         }
       }
     },
-    "/api/User/pingauth": {
+    "/api/User/me": {
       "get": {
         "tags": [
           "User"
         ],
-        "operationId": "pingauth",
+        "operationId": "getMe",
         "responses": {
           "200": {
             "description": "OK",
@@ -397,12 +397,12 @@
         }
       }
     },
-    "/api/User/toggleIsSubscribed": {
+    "/api/User/subscribtion": {
       "patch": {
         "tags": [
           "User"
         ],
-        "operationId": "toggleIsSubscribed",
+        "operationId": "toggleSubscription",
         "responses": {
           "200": {
             "description": "OK"

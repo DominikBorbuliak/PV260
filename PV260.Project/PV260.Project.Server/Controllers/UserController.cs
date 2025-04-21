@@ -30,8 +30,8 @@ public class UserController : ApiController
     }
 
     [Authorize]
-    [HttpGet("pingauth", Name = "pingauth")]
-    public async Task<ActionResult<UserDto>> PingAuth()
+    [HttpGet("me", Name = "getMe")]
+    public async Task<ActionResult<UserDto>> GetMe()
     {
         string email = User.GetEmail();
         User user = await _userService.GetUserByEmailAsync(email);
@@ -40,8 +40,8 @@ public class UserController : ApiController
     }
 
     [Authorize]
-    [HttpPatch("toggleIsSubscribed", Name = "toggleIsSubscribed")]
-    public async Task<ActionResult> ToggleIsSubscired()
+    [HttpPatch("subscribtion", Name = "toggleSubscription")]
+    public async Task<ActionResult> ToggleSubscription()
     {
         string email = User.GetEmail();
         await _userService.ToggleIsSubscribedAsync(email);
