@@ -6,9 +6,9 @@ import z from 'zod';
 import { Button } from '../ui/button';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { login } from '@/services/api/auth';
 import { Separator } from '@radix-ui/react-separator';
 import { FormField } from '../form/Field';
+import { apiClient } from '@/services/api/base';
 
 const loginFormSchema = z.object({
   email: z.string().refine((value) => (value.match(/.+@.+/)?.length ?? 0) > 0, {
@@ -23,7 +23,13 @@ export const LoginForm = () => {
   const navigate = useNavigate();
   const loginMutation = useMutation({
     mutationFn: async ({ email, password }: LoginFormType) =>
-      login(email, password),
+      await apiClient.pv260ProjectServer.postApiUserLogin({
+        requestBody: {
+          email,
+          password,
+        },
+        useSessionCookies: true,
+      }),
   });
 
   const form = useForm({

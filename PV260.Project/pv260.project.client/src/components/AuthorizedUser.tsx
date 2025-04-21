@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { useUser } from '../contexts/UserContext';
-import { User } from '../types/User';
+import { UserDto } from '@/_generatedClient';
 
 interface AuthorizedUserProps {
-  value: keyof User;
+  value: keyof UserDto;
 }
 
 export const AuthorizedUser: FC<AuthorizedUserProps> = ({ value }) => {

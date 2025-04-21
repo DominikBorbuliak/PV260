@@ -22,6 +22,7 @@ export type { ResendConfirmationEmailRequest } from './models/ResendConfirmation
 export type { ResetPasswordRequest } from './models/ResetPasswordRequest';
 export type { TwoFactorRequest } from './models/TwoFactorRequest';
 export type { TwoFactorResponse } from './models/TwoFactorResponse';
+export type { UserDto } from './models/UserDto';
 
 export { Pv260ProjectServerService } from './services/Pv260ProjectServerService';
 export { UserService } from './services/UserService';

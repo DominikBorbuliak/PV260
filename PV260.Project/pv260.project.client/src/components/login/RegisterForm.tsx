@@ -6,9 +6,9 @@ import z from 'zod';
 import { Button } from '../ui/button';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { register } from '@/services/api/auth';
 import { Separator } from '@radix-ui/react-separator';
 import { FormField } from '../form/Field';
+import { apiClient } from '@/services/api/base';
 
 const registerFormSchema = z.object({
   email: z.string().refine((value) => value.match(/.+@.+/), {
@@ -33,8 +33,14 @@ type RegisterFormType = z.infer<typeof registerFormSchema>;
 export const RegisterForm = () => {
   const navigate = useNavigate();
   const registerMutation = useMutation({
-    mutationFn: async ({ email, password }: RegisterFormType) =>
-      register(email, password),
+    mutationFn: async ({ email, password }: RegisterFormType) => {
+      await apiClient.pv260ProjectServer.postApiUserRegister({
+        requestBody: {
+          email,
+          password,
+        },
+      });
+    },
   });
 
   const form = useForm({

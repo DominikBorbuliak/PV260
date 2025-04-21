@@ -375,6 +375,36 @@
         "operationId": "pingauth",
         "responses": {
           "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/User/toggleIsSubscribed": {
+      "patch": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "toggleIsSubscribed",
+        "responses": {
+          "200": {
             "description": "OK"
           }
         }
@@ -613,6 +643,20 @@
             "type": "boolean"
           },
           "isMachineRemembered": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UserDto": {
+        "required": [
+          "email"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "isSubscribed": {
             "type": "boolean"
           }
         }

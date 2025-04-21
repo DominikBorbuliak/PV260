@@ -26,8 +26,8 @@ import { useContext } from 'react';
 import { UserContext } from '@/contexts/UserContext.tsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { logOut } from '@/services/api/auth.ts';
 import { AuthorizedUser } from '@/components/AuthorizedUser.tsx';
+import { apiClient } from '@/services/api/base';
 
 interface MenuItem {
   title: string;
@@ -58,25 +58,25 @@ interface NavbarProps {
 }
 
 const Navbar = ({
-                  logo = {
-                    url: '/',
-                    src: 'https://www.em.muni.cz/cache-thumbs/logo_muni_web-1580x790-2008259181.jpg',
-                    alt: 'logo',
-                    title: 'SW Quality',
-                  },
-                  menu = [],
-                  auth = {
-                    login: { title: 'Login', url: '/login' },
-                    signup: { title: 'Register', url: '/register' },
-                  },
-                }: NavbarProps) => {
-
+  logo = {
+    url: '/',
+    src: 'https://www.em.muni.cz/cache-thumbs/logo_muni_web-1580x790-2008259181.jpg',
+    alt: 'logo',
+    title: 'SW Quality',
+  },
+  menu = [],
+  auth = {
+    login: { title: 'Login', url: '/login' },
+    signup: { title: 'Register', url: '/register' },
+  },
+}: NavbarProps) => {
   const user = useContext(UserContext);
   const navigate = useNavigate();
 
-
   const logoutMutation = useMutation({
-    mutationFn: logOut,
+    mutationFn: async () => {
+      await apiClient.user.logout();
+    },
     onSuccess: () => navigate('/login'),
   });
 
@@ -162,7 +162,11 @@ const Navbar = ({
                         <AuthorizedUser value="email" />
                       </span>
                       {user ? (
-                        <Button variant="outline" size="sm" onClick={handleLogout}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleLogout}
+                        >
                           Log out
                         </Button>
                       ) : (
@@ -171,7 +175,9 @@ const Navbar = ({
                             <Link to={auth.login.url}>{auth.login.title}</Link>
                           </Button>
                           <Button asChild size="sm">
-                            <Link to={auth.signup.url}>{auth.signup.title}</Link>
+                            <Link to={auth.signup.url}>
+                              {auth.signup.title}
+                            </Link>
                           </Button>
                         </>
                       )}

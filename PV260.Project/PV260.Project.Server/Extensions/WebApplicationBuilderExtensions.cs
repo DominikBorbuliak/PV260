@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PV260.Project.BusinessLayer.Exceptions;
+using PV260.Project.BusinessLayer.Interfaces.BusinessLayer;
 using PV260.Project.BusinessLayer.Interfaces.DataAccessLayer;
 using PV260.Project.BusinessLayer.Options.ArkFundsApi;
+using PV260.Project.BusinessLayer.Services;
 using PV260.Project.DataAccessLayer.Data;
 using PV260.Project.DataAccessLayer.Models;
 
@@ -78,6 +80,9 @@ public static class WebApplicationBuilderExtensions
     public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder builder)
     {
         _ = builder.Services.AddScoped<IArkFundsApiRepository, ArkFundsApiRepository>();
+        _ = builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+        _ = builder.Services.AddScoped<IUserService, UserService>();
 
         return builder;
     }

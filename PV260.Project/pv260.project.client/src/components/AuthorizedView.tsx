@@ -1,7 +1,6 @@
-import { ApiError } from '@/_generatedClient';
+import { ApiError, UserDto } from '@/_generatedClient';
 import { UserContext } from '@/contexts/UserContext';
 import { apiClient } from '@/services/api/base';
-import { User } from '@/types/User';
 import { useQuery } from '@tanstack/react-query';
 import { FC } from 'react';
 import { Navigate } from 'react-router-dom';
@@ -16,11 +15,10 @@ export const AuthorizedView: FC<AuthorizeViewProps> = ({ children }) => {
     isLoading,
     isError,
     error,
-  } = useQuery<User, ApiError>({
+  } = useQuery<UserDto, ApiError>({
     queryKey: ['pingauth'],
     queryFn: async () => {
-      const res = (await apiClient.user.pingauth()) as User;
-      return res;
+      return await apiClient.user.pingauth();
     },
     retry: 1,
     retryDelay: 500,
