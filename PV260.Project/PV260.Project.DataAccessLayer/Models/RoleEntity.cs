@@ -2,6 +2,6 @@
 
 namespace PV260.Project.DataAccessLayer.Models;
 
-public class Role : IdentityRole
+public class RoleEntity : IdentityRole
 {
 }
