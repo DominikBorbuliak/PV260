@@ -27,6 +27,7 @@ import { UserContext } from '@/contexts/UserContext.tsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { logOut } from '@/services/api/auth.ts';
+import { AuthorizedUser } from '@/components/AuthorizedUser.tsx';
 
 interface MenuItem {
   title: string;
@@ -105,6 +106,9 @@ const Navbar = ({
             </div>
           </div>
           <div className="flex gap-2">
+            <span className="my-auto px-3">
+              <AuthorizedUser value="email" />
+            </span>
             {user ? (
               <Button variant="outline" size="sm" onClick={handleLogout}>
                 Log out
@@ -127,7 +131,7 @@ const Navbar = ({
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link to={logo.url} className="flex items-center gap-2">
-              <img src={logo.src} className="max-h-8" alt={logo.alt} />
+              <img src={logo.src} className="max-h-12" alt={logo.alt} />
             </Link>
             <Sheet>
               <SheetTrigger asChild>
@@ -153,12 +157,25 @@ const Navbar = ({
                   </Accordion>
 
                   <div className="flex flex-col gap-3">
-                    <Button asChild variant="outline">
-                      <Link to={auth.login.url}>{auth.login.title}</Link>
-                    </Button>
-                    <Button asChild>
-                      <Link to={auth.signup.url}>{auth.signup.title}</Link>
-                    </Button>
+                    <div className="flex gap-2 flex-col ">
+                      <span className="m-auto p-3">
+                        <AuthorizedUser value="email" />
+                      </span>
+                      {user ? (
+                        <Button variant="outline" size="sm" onClick={handleLogout}>
+                          Log out
+                        </Button>
+                      ) : (
+                        <>
+                          <Button asChild variant="outline" size="sm">
+                            <Link to={auth.login.url}>{auth.login.title}</Link>
+                          </Button>
+                          <Button asChild size="sm">
+                            <Link to={auth.signup.url}>{auth.signup.title}</Link>
+                          </Button>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
               </SheetContent>

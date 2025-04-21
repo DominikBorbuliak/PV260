@@ -1,4 +1,3 @@
-import { AuthorizedUser } from '@/components/AuthorizedUser';
 import { AuthorizedView } from '@/components/AuthorizedView';
 import { Button } from '@/components/ui/button';
 import { FC } from 'react';
@@ -11,9 +10,6 @@ const HomePage: FC = () => {
     <AuthorizedView>
       <div className="container mx-auto">
         <Navbar />
-        <h1>
-          Hello world <AuthorizedUser value="email" />!
-        </h1>
         <div className="mt-10">
           <div className="grow bg-muted flex justify-end py-6 rounded-xl">
             <div className="mx-2">

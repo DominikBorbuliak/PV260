@@ -12,7 +12,7 @@ const Footer = () => {
               {/* Logo */}
 
               <img src="https://www.em.muni.cz/cache-thumbs/logo_muni_web-1580x790-2008259181.jpg" alt="Logo"
-                   width="40" height="40" />
+                   width="120" height="120" />
             </div>
             {/* Subscribe Newsletter */}
             <div className="max-w-xs w-full">
