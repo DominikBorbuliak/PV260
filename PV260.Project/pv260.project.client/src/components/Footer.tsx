@@ -1,8 +1,49 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import z from 'zod';
+import { useMutation } from '@tanstack/react-query';
+import { Form, FormMessage } from './ui/form';
+import { FormField } from '@/components/form/Field.tsx';
+import { subscribe } from '@/services/api/subscribe.ts';
+
+const subscribeFormSchema = z.object({
+  email: z.string().refine((value) => (value.match(/.+@.+/)?.length ?? 0) > 0, {
+    message: 'Email must contain \'@\'.',
+  }),
+});
+
+type SubscribeFormType = z.infer<typeof subscribeFormSchema>;
 
 const Footer = () => {
+
+  const subscribeMutation = useMutation({
+    mutationFn: async ({ email }: SubscribeFormType) =>
+      subscribe(email),
+  });
+
+  const form = useForm({
+    resolver: zodResolver(subscribeFormSchema),
+    defaultValues: {
+      email: '',
+    },
+  });
+
+  const onSubmit = async (data: SubscribeFormType) => {
+    form.clearErrors('root');
+
+    await subscribeMutation.mutateAsync(data, {
+      onError: () =>
+        form.setError('root', { message: 'Invalid email.' }),
+      onSuccess: () => {
+        form.reset();
+        form.setValue('email', '');
+      },
+    });
+  };
+
   return (
     <div className="flex flex-col">
       <footer>
@@ -17,10 +58,23 @@ const Footer = () => {
             {/* Subscribe Newsletter */}
             <div className="max-w-xs w-full">
               <h6 className="font-semibold">Stay up to date</h6>
-              <form className="mt-6 flex items-center gap-2">
-                <Input type="email" placeholder="Enter your email" />
-                <Button>Subscribe</Button>
-              </form>
+              <Form {...form} >
+                {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                  <FormField
+                    name="email"
+                    renderControl={(field) => (
+                      <Input placeholder="Email Address" type="email" {...field} />
+                    )}
+                  />
+                  {form.formState.errors.root && (
+                    <FormMessage className="text-xs">
+                      {form.formState.errors.root.message}
+                    </FormMessage>
+                  )}
+                  <Button className='mt-2' type='submit'>Subscribe</Button>
+                </form>
+              </Form>
             </div>
           </div>
           <Separator />
