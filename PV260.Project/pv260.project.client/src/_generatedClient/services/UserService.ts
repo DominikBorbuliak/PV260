@@ -34,7 +34,7 @@ export class UserService {
     public toggleSubscription(): CancelablePromise<any> {
         return this.httpRequest.request({
             method: 'PATCH',
-            url: '/api/User/subscribtion',
+            url: '/api/User/subscription',
         });
     }
 }

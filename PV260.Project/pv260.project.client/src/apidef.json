@@ -397,7 +397,7 @@
         }
       }
     },
-    "/api/User/subscribtion": {
+    "/api/User/subscription": {
       "patch": {
         "tags": [
           "User"

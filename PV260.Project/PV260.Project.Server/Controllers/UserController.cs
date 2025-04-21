@@ -40,7 +40,7 @@ public class UserController : ApiController
     }
 
     [Authorize]
-    [HttpPatch("subscribtion", Name = "toggleSubscription")]
+    [HttpPatch("subscription", Name = "toggleSubscription")]
     public async Task<ActionResult> ToggleSubscription()
     {
         string email = User.GetEmail();
