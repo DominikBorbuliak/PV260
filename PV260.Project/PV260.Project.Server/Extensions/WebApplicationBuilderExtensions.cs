@@ -82,7 +82,7 @@ public static class WebApplicationBuilderExtensions
     public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder builder)
     {
         _ = builder.Services.AddScoped<IArkFundsApiRepository, ArkFundsApiRepository>();
-        _ = builder.Services.AddTransient<IEmailService, EmailService>();
+        _ = builder.Services.AddScoped<IEmailService, EmailService>();
         
         return builder;
     }
