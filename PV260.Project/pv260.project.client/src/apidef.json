@@ -367,12 +367,42 @@
         }
       }
     },
-    "/api/User/pingauth": {
+    "/api/User/me": {
       "get": {
         "tags": [
           "User"
         ],
-        "operationId": "pingauth",
+        "operationId": "getMe",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/User/subscription": {
+      "patch": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "toggleSubscription",
         "responses": {
           "200": {
             "description": "OK"
@@ -613,6 +643,20 @@
             "type": "boolean"
           },
           "isMachineRemembered": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UserDto": {
+        "required": [
+          "email"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "isSubscribed": {
             "type": "boolean"
           }
         }

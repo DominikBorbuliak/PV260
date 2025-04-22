@@ -29,9 +29,4 @@
     <ProjectReference Include="..\PV260.Project.DataAccessLayer\PV260.Project.DataAccessLayer.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Dtos\" />
-    <Folder Include="Mappers\" />
-  </ItemGroup>
-
 </Project>

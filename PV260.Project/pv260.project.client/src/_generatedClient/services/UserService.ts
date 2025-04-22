@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { UserDto } from '../models/UserDto';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class UserService {
@@ -17,13 +18,23 @@ export class UserService {
         });
     }
     /**
+     * @returns UserDto OK
+     * @throws ApiError
+     */
+    public getMe(): CancelablePromise<UserDto> {
+        return this.httpRequest.request({
+            method: 'GET',
+            url: '/api/User/me',
+        });
+    }
+    /**
      * @returns any OK
      * @throws ApiError
      */
-    public pingauth(): CancelablePromise<any> {
+    public toggleSubscription(): CancelablePromise<any> {
         return this.httpRequest.request({
-            method: 'GET',
-            url: '/api/User/pingauth',
+            method: 'PATCH',
+            url: '/api/User/subscription',
         });
     }
 }
