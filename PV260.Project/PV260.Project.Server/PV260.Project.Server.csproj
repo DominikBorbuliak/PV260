@@ -7,6 +7,7 @@
     <SpaRoot>..\pv260.project.client</SpaRoot>
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:55395</SpaProxyServerUrl>
+    <UserSecretsId>f95951dc-c9d1-4e28-ae0b-472494e4c463</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

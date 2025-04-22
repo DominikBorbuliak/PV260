@@ -4,6 +4,10 @@ using PV260.Project.BusinessLayer.Exceptions;
 using PV260.Project.BusinessLayer.Interfaces.BusinessLayer;
 using PV260.Project.BusinessLayer.Interfaces.DataAccessLayer;
 using PV260.Project.BusinessLayer.Options.ArkFundsApi;
+using PV260.Project.BusinessLayer.Interfaces.BusinessLayer.Services;
+using PV260.Project.BusinessLayer.Interfaces.DataAccessLayer;
+using PV260.Project.BusinessLayer.Options.ArkFundsApi;
+using PV260.Project.BusinessLayer.Options.SMTP;
 using PV260.Project.BusinessLayer.Services;
 using PV260.Project.DataAccessLayer.Data;
 using PV260.Project.DataAccessLayer.Models;
@@ -32,6 +36,7 @@ public static class WebApplicationBuilderExtensions
     public static WebApplicationBuilder ConfigureOptions(this WebApplicationBuilder builder)
     {
         _ = builder.Services.Configure<ArkFundsApiOptions>(builder.Configuration.GetSection(ArkFundsApiOptions.Key));
+        _ = builder.Services.Configure<SMTPOptions>(builder.Configuration.GetSection(SMTPOptions.Key));
 
         return builder;
     }
@@ -83,7 +88,8 @@ public static class WebApplicationBuilderExtensions
         _ = builder.Services.AddScoped<IUserRepository, UserRepository>();
 
         _ = builder.Services.AddScoped<IUserService, UserService>();
-
+        _ = builder.Services.AddScoped<IEmailService, EmailService>();
+        
         return builder;
     }
 
