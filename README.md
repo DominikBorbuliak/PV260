@@ -75,3 +75,12 @@ In order to use any other SMTP server, such as Gmail, you need to update `Host` 
 ```
 
 Then you can configure credentials same as in the previous section.
+
+## SSL Certificate Problems
+
+In case of problems with ssl certificate follow this steps:
+
+1. Close Visual Studio
+2. `dotnet dev-certs https --clean`
+3. Remove your keys and pem from `C:\Users\...\AppData\Roaming\ASP.NET\https`
+4. `dotnet dev-certs https --trust`
