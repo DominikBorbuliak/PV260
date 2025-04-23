@@ -21,11 +21,11 @@ Run these from the _PV260.Project/_ directory.
 
 Add new migration:
 
-`dotnet ef migrations add <MigrationName> -s .\PV260.Project.Server\ -p .\PV260.Project.DataAccessLayer\`
+`dotnet ef migrations add <MigrationName> -s .\PV260.Project.Server\ -p .\PV260.Project.Infrastructure\`
 
 Update the database:
 
-`dotnet ef database update -s .\PV260.Project.Server\ -p .\PV260.Project.DataAccessLayer\`
+`dotnet ef database update -s .\PV260.Project.Server\ -p .\PV260.Project.Infrastructure\`
 
 ## SMTP Configuration
 

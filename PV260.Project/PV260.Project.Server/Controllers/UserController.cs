@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PV260.Project.BusinessLayer.Interfaces.BusinessLayer;
-using PV260.Project.BusinessLayer.Models;
-using PV260.Project.DataAccessLayer.Models;
+using PV260.Project.Domain.Interfaces.Domain;
+using PV260.Project.Domain.Models;
+using PV260.Project.Infrastructure.Persistence.Models;
 using PV260.Project.Server.Dtos;
 using PV260.Project.Server.Extensions;
 using PV260.Project.Server.Mappers;

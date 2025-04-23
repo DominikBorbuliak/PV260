@@ -1,6 +1,5 @@
-﻿
-using PV260.Project.BusinessLayer;
-using PV260.Project.BusinessLayer.Exceptions;
+﻿using PV260.Project.Domain;
+using PV260.Project.Domain.Exceptions;
 using System.Net;
 
 namespace PV260.Project.Server.Middlewares;
