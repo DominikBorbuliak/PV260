@@ -1,4 +1,4 @@
-﻿using PV260.Project.BusinessLayer.Models;
+﻿using PV260.Project.Domain.Models;
 using PV260.Project.Server.Dtos;
 
 namespace PV260.Project.Server.Mappers;

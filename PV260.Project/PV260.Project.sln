@@ -7,9 +7,9 @@ Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "pv260.project.client", "pv2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PV260.Project.Server", "PV260.Project.Server\PV260.Project.Server.csproj", "{A286A16B-0327-47B1-B502-DD65A4D5E4F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PV260.Project.DataAccessLayer", "PV260.Project.DataAccessLayer\PV260.Project.DataAccessLayer.csproj", "{8EA37E3E-B350-49A2-95C5-4D5EDC1B4612}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PV260.Project.Infrastructure", "PV260.Project.Infrastructure\PV260.Project.Infrastructure.csproj", "{8EA37E3E-B350-49A2-95C5-4D5EDC1B4612}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PV260.Project.BusinessLayer", "PV260.Project.BusinessLayer\PV260.Project.BusinessLayer.csproj", "{0426BBCD-B9DB-4124-9F85-B679819C4B59}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PV260.Project.Domain", "PV260.Project.Domain\PV260.Project.Domain.csproj", "{0426BBCD-B9DB-4124-9F85-B679819C4B59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

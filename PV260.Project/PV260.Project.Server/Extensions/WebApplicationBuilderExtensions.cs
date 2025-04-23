@@ -1,16 +1,18 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using PV260.Project.BusinessLayer.Exceptions;
-using PV260.Project.BusinessLayer.Interfaces.BusinessLayer;
-using PV260.Project.BusinessLayer.Interfaces.DataAccessLayer;
-using PV260.Project.BusinessLayer.Options.ArkFundsApi;
-using PV260.Project.BusinessLayer.Interfaces.BusinessLayer.Services;
-using PV260.Project.BusinessLayer.Interfaces.DataAccessLayer;
-using PV260.Project.BusinessLayer.Options.ArkFundsApi;
-using PV260.Project.BusinessLayer.Options.SMTP;
-using PV260.Project.BusinessLayer.Services;
-using PV260.Project.DataAccessLayer.Data;
-using PV260.Project.DataAccessLayer.Models;
+using PV260.Project.Domain.Exceptions;
+using PV260.Project.Domain.Interfaces.Domain;
+using PV260.Project.Domain.Interfaces.Infrastructure.ArkFunds;
+using PV260.Project.Domain.Interfaces.Infrastructure.Email;
+using PV260.Project.Domain.Interfaces.Infrastructure.Persistence;
+using PV260.Project.Domain.Options.ArkFundsApi;
+using PV260.Project.Domain.Options.SMTP;
+using PV260.Project.Domain.Services;
+using PV260.Project.Infrastructure.ArkFunds.Repositories;
+using PV260.Project.Infrastructure.Email;
+using PV260.Project.Infrastructure.Persistence;
+using PV260.Project.Infrastructure.Persistence.Models;
+using PV260.Project.Infrastructure.Persistence.Repositories;
 
 namespace PV260.Project.Server.Extensions;
 
@@ -88,8 +90,8 @@ public static class WebApplicationBuilderExtensions
         _ = builder.Services.AddScoped<IUserRepository, UserRepository>();
 
         _ = builder.Services.AddScoped<IUserService, UserService>();
-        _ = builder.Services.AddScoped<IEmailService, EmailService>();
-        
+        _ = builder.Services.AddScoped<IEmailSender, EmailSender>();
+
         return builder;
     }
 

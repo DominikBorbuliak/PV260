@@ -1,4 +1,4 @@
-﻿using PV260.Project.DataAccessLayer.Models;
+﻿using PV260.Project.Infrastructure.Persistence.Models;
 using PV260.Project.Server.Middlewares;
 
 namespace PV260.Project.Server.Extensions;
