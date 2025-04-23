@@ -21,7 +21,7 @@ Run these from the _PV260.Project/_ directory.
 
 Add new migration:
 
-`dotnet ef migrations add <MigrationName> -s .\PV260.Project.Server\ -p .\PV260.Project.Infrastructure\`
+`dotnet ef migrations add <MigrationName> -s .\PV260.Project.Server\ -p .\PV260.Project.Infrastructure\ -o .\Persistence\Migrations\`
 
 Update the database:
 
