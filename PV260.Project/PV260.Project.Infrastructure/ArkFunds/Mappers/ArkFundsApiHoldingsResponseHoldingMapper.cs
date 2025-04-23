@@ -1,7 +1,7 @@
 ﻿using PV260.Project.Domain.Models;
-using PV260.Project.Infrastructure.Persistence.Models;
+using PV260.Project.Infrastructure.ArkFunds.Models;
 
-namespace PV260.Project.Infrastructure.Persistence.Mappers;
+namespace PV260.Project.Infrastructure.ArkFunds.Mappers;
 
 public static class ArkFundsApiHoldingsResponseHoldingMapper
 {

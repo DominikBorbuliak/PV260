@@ -3,7 +3,7 @@ using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using PV260.Project.Domain.Exceptions;
-using PV260.Project.Domain.Interfaces.Domain;
+using PV260.Project.Domain.Interfaces.Infrastructure.Email;
 using PV260.Project.Domain.Models;
 using PV260.Project.Domain.Options.SMTP;
 
@@ -32,7 +32,7 @@ public class EmailSender : IEmailSender
         var email = new MimeMessage();
         email.From.Add(MailboxAddress.Parse(_smtpOptions.Email));
 
-        foreach (var recipient in configuration.Recipients)
+        foreach (string recipient in configuration.Recipients)
         {
             email.To.Add(MailboxAddress.Parse(recipient));
         }
@@ -44,7 +44,7 @@ public class EmailSender : IEmailSender
 
         await smtpClient.ConnectAsync(_smtpOptions.Host, _smtpOptions.Port, SecureSocketOptions.StartTls);
         await smtpClient.AuthenticateAsync(_smtpOptions.Email, _smtpOptions.Password);
-        await smtpClient.SendAsync(email);
+        _ = await smtpClient.SendAsync(email);
         await smtpClient.DisconnectAsync(true);
     }
 

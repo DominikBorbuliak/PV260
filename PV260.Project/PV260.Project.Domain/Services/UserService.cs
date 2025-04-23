@@ -1,5 +1,5 @@
 ﻿using PV260.Project.Domain.Interfaces.Domain;
-using PV260.Project.Domain.Interfaces.Infrastructure;
+using PV260.Project.Domain.Interfaces.Infrastructure.Persistence;
 using PV260.Project.Domain.Models;
 
 namespace PV260.Project.Domain.Services;

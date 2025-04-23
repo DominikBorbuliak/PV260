@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PV260.Project.Domain;
 using PV260.Project.Domain.Exceptions;
-using PV260.Project.Domain.Interfaces.Infrastructure;
+using PV260.Project.Domain.Interfaces.Infrastructure.Persistence;
 using PV260.Project.Domain.Models;
 using PV260.Project.Infrastructure.Persistence.Mappers;
 
-namespace PV260.Project.Infrastructure.Persistence.Data;
+namespace PV260.Project.Infrastructure.Persistence.Repositories;
 
 public class UserRepository : IUserRepository
 {
@@ -18,7 +18,7 @@ public class UserRepository : IUserRepository
 
     public async Task<User> GetUserByEmailAsync(string email)
     {
-        var user = await _appDbContext.Users
+        Models.UserEntity user = await _appDbContext.Users
             .FirstOrDefaultAsync(u => u.Email == email)
             ?? throw new NotFoundException(string.Format(Constants.Error.NotFoundFormat, nameof(User), nameof(email)));
 

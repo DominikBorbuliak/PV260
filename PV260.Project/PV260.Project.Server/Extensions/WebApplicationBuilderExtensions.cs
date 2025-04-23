@@ -2,13 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using PV260.Project.Domain.Exceptions;
 using PV260.Project.Domain.Interfaces.Domain;
-using PV260.Project.Domain.Interfaces.Infrastructure;
+using PV260.Project.Domain.Interfaces.Infrastructure.ArkFunds;
+using PV260.Project.Domain.Interfaces.Infrastructure.Email;
+using PV260.Project.Domain.Interfaces.Infrastructure.Persistence;
 using PV260.Project.Domain.Options.ArkFundsApi;
 using PV260.Project.Domain.Options.SMTP;
 using PV260.Project.Domain.Services;
+using PV260.Project.Infrastructure.ArkFunds.Repositories;
 using PV260.Project.Infrastructure.Email;
-using PV260.Project.Infrastructure.Persistence.Data;
+using PV260.Project.Infrastructure.Persistence;
 using PV260.Project.Infrastructure.Persistence.Models;
+using PV260.Project.Infrastructure.Persistence.Repositories;
 
 namespace PV260.Project.Server.Extensions;
 

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace PV260.Project.Infrastructure.Persistence.Models;
+namespace PV260.Project.Infrastructure.ArkFunds.Models;
 
 public class ArkFundsApiHoldingsResponse
 {

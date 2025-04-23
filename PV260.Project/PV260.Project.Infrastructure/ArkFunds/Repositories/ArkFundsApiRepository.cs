@@ -1,14 +1,16 @@
 ﻿using Microsoft.Extensions.Options;
 using PV260.Project.Domain.Exceptions;
-using PV260.Project.Domain.Interfaces.Infrastructure;
+using PV260.Project.Domain.Interfaces.Infrastructure.ArkFunds;
 using PV260.Project.Domain.Models;
 using PV260.Project.Domain.Options.ArkFundsApi;
+using PV260.Project.Infrastructure.ArkFunds.Mappers;
+using PV260.Project.Infrastructure.ArkFunds.Models;
 using PV260.Project.Infrastructure.Persistence.Mappers;
-using PV260.Project.Infrastructure.Persistence.Models;
+using System.Collections.Specialized;
 using System.Text.Json;
 using System.Web;
 
-namespace PV260.Project.Infrastructure.Persistence.Data;
+namespace PV260.Project.Infrastructure.ArkFunds.Repositories;
 
 public class ArkFundsApiRepository : IArkFundsApiRepository
 {
@@ -33,17 +35,17 @@ public class ArkFundsApiRepository : IArkFundsApiRepository
             Path = _arkFundsApiOptions.Endpoints.Holdings
         };
 
-        var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+        NameValueCollection query = HttpUtility.ParseQueryString(uriBuilder.Query);
         query["symbol"] = _arkFundsApiOptions.Symbols.Innovation;
 
         uriBuilder.Query = query.ToString();
 
-        var response = await _httpClient.GetAsync(uriBuilder.Uri);
+        HttpResponseMessage response = await _httpClient.GetAsync(uriBuilder.Uri);
         _ = response.EnsureSuccessStatusCode();
 
-        var responseBody = await response.Content.ReadAsStringAsync();
+        string responseBody = await response.Content.ReadAsStringAsync();
 
-        var result = JsonSerializer.Deserialize<ArkFundsApiHoldingsResponse>(responseBody)
+        ArkFundsApiHoldingsResponse result = JsonSerializer.Deserialize<ArkFundsApiHoldingsResponse>(responseBody)
             ?? throw new HttpRequestException($"Could not deserialize response of '{uriBuilder.Uri}'");
 
         return result.Holdings

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PV260.Project.Infrastructure.Persistence.Models;
 
-namespace PV260.Project.Infrastructure.Persistence.Data;
+namespace PV260.Project.Infrastructure.Persistence;
 
 public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, string>
 {
