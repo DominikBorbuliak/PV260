@@ -33,4 +33,12 @@ public class UserRepository : IUserRepository
                 .SetProperty(s => s.IsSubscribed, s => !s.IsSubscribed)
             );
     }
+
+    public async Task<List<string>> GetSubscribedUserEmailsAsync()
+    {
+        return await _appDbContext.Users
+            .Where(u => u.IsSubscribed)
+            .Select(u => u.Email!)
+            .ToListAsync();
+    }
 }
