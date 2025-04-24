@@ -16,8 +16,13 @@ const HomePage: FC = () => {
     isLoading,
   } = useQuery<ArkHoldingsDiffDto[], ApiError>({
     queryKey: ['GET', 'ArkHoldingsDiff'],
-    queryFn: async () => {
-      return await apiClient.arkHoldings.getArkHoldingsDiff();
+    queryFn: async (): Promise<ArkHoldingsDiffDto[]> => {
+      try {
+        return await apiClient.arkHoldings.getArkHoldingsDiff();
+      } catch (error) {
+        alert('Error fetching data');
+        throw error;
+      }
     },
   });
 
@@ -32,7 +37,7 @@ const HomePage: FC = () => {
             </div>
             <Button className="mx-2">Update Data</Button>
           </div>
-          {isLoading ? <p>Loading...</p> : (<ArkHoldingsTableDiffs data={arkHoldings ? arkHoldings : []} />)}
+          {isLoading ? <p>Loading...</p> : (<ArkHoldingsTableDiffs data={arkHoldings ?? []} />)}
         </div>
         <Footer />
       </div>

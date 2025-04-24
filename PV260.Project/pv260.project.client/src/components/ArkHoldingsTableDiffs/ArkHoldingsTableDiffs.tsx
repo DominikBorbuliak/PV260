@@ -28,7 +28,7 @@ export const ArkHoldingsTableDiffs = ({ data }: ArkHoldingsTableDiffsProps) => {
   const [rowSelection, setRowSelection] = React.useState({});
 
   const date1 = data[0]?.date ?? 'N/A';
-  const date2 = data[0]?.date2 || 'N/A';
+  const date2 = data[0]?.date2 ?? 'N/A';
   const columns = React.useMemo(() => getColumns(date1, date2), [date1, date2]);
 
   const table = useReactTable({
