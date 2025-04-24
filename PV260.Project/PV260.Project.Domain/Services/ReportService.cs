@@ -69,34 +69,23 @@ public class ReportService : IReportService
 
         foreach (var (ticker, newH) in newDict)
         {
-            if (oldDict.TryGetValue(ticker, out var oldH))
-            {
-                if (newH.Shares != oldH.Shares)
-                {
-                    diff.Changes.Add(new HoldingChange
-                    {
-                        Ticker = ticker,
-                        Company = newH.Company,
-                        ChangeType = ChangeType.Modified,
-                        OldShares = oldH.Shares,
-                        NewShares = newH.Shares
-                    });
-                }
-            }
-            else
+            oldDict.TryGetValue(ticker, out var oldH);
+
+            if (oldH == null || newH.Shares != oldH.Shares)
             {
                 diff.Changes.Add(new HoldingChange
                 {
                     Ticker = ticker,
                     Company = newH.Company,
-                    ChangeType = ChangeType.Added,
-                    OldShares = 0,
+                    ChangeType = oldH == null ? ChangeType.Added : ChangeType.Modified,
+                    OldShares = oldH?.Shares ?? 0,
                     NewShares = newH.Shares
                 });
             }
         }
 
-        foreach (var ticker in oldDict.Keys.Except(newDict.Keys))
+        var removedTickers = oldDict.Keys.Except(newDict.Keys);
+        foreach (var ticker in removedTickers)
         {
             var oldH = oldDict[ticker];
             diff.Changes.Add(new HoldingChange
@@ -104,8 +93,7 @@ public class ReportService : IReportService
                 Ticker = ticker,
                 Company = oldH.Company,
                 ChangeType = ChangeType.Removed,
-                OldShares = oldH.Shares,
-                NewShares = 0
+                OldShares = oldH.Shares
             });
         }
 
