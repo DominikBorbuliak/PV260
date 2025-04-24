@@ -7,6 +7,7 @@ namespace PV260.Project.Infrastructure.Persistence;
 public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, string>
 {
     public override DbSet<UserEntity> Users { get; set; }
+    public DbSet<ReportEntity> Reports { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
