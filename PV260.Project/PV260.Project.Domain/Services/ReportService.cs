@@ -30,7 +30,7 @@ public class ReportService : IReportService
         var currentHoldings = await _arkRepository.GetCurrentHoldingsAsync();
 
         var lastReportEntity = await _reportRepository.GetLatestReportAsync();
-        IList<ArkFundsHolding> previousHoldings = lastReportEntity?.Holdings ?? new List<ArkFundsHolding>();
+        IList<ArkFundsHolding> previousHoldings = lastReportEntity?.Holdings ?? [];
 
         var diff = CreateReportDiff(previousHoldings, currentHoldings);
 
