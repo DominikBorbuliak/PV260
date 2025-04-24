@@ -4,7 +4,7 @@ public class Report
 {
     public Guid Id { get; set; }
 
-    public ReportDiff? Diff { get; set; }
+    public IList<HoldingChange> Diff { get; set; } = [];
 
     public DateTime CreatedAt { get; set; }
 
