@@ -1,9 +1,6 @@
 ﻿using PV260.Project.Domain.Models;
 using PV260.Project.Infrastructure.Persistence.Models;
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using PV260.Project.Domain;
-using PV260.Project.Domain.Exceptions;
 using PV260.Project.Infrastructure.Persistence.Mappers;
 
 namespace PV260.Project.Infrastructure.Persistence.Repositories;
@@ -19,13 +16,25 @@ public class ReportRepository : IReportRepository
 
     public async Task SaveReportAsync(IList<ArkFundsHolding> holdings, ReportDiff diff)
     {
-        var reportJson = JsonSerializer.Serialize(holdings);
-        var diffJson = JsonSerializer.Serialize(diff);
-
         var report = new ReportEntity()
         {
-            ReportJson = reportJson,
-            DiffJson = diffJson
+            CreatedAt = DateTime.UtcNow,
+            Holdings = holdings.Select(h => new ReportHoldingEntity
+            {
+                Ticker = h.Ticker,
+                Company = h.Company,
+                Shares = h.Shares,
+                Weight = h.Weight
+            }).ToList(),
+
+            Changes = diff.Changes.Select(c => new ReportChangeEntity
+            {
+                Ticker = c.Ticker,
+                Company = c.Company,
+                ChangeType = c.ChangeType,
+                OldShares = c.OldShares,
+                NewShares = c.NewShares
+            }).ToList()
         };
 
         _appDbContext.Reports.Add(report);

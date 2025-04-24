@@ -11,8 +11,26 @@ public static class ReportMapper
         {
             Id = entity.Id,
             CreatedAt = entity.CreatedAt,
-            Holdings = JsonSerializer.Deserialize<IList<ArkFundsHolding>>(entity.ReportJson) ?? [],
-            Diff = JsonSerializer.Deserialize<ReportDiff>(entity.DiffJson) ?? new()
+            Holdings = entity.Holdings
+                .Select(h => new ArkFundsHolding
+                {
+                    Ticker = h.Ticker,
+                    Company = h.Company,
+                    Shares = h.Shares,
+                    Weight = h.Weight
+                })
+                .ToList(),
+            
+            Diff = entity.Changes
+                .Select(c => new HoldingChange
+                {
+                    Ticker = c.Ticker,
+                    Company = c.Company,
+                    ChangeType = c.ChangeType,
+                    OldShares = c.OldShares,
+                    NewShares = c.NewShares
+                })
+                .ToList()
         };
     }
 }
