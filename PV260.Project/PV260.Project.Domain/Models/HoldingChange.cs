@@ -6,6 +6,6 @@ public class HoldingChange
     public string Company { get; set; } = string.Empty;
     public ChangeType ChangeType { get; set; }
 
-    public int? OldShares { get; set; }
-    public int? NewShares { get; set; }
+    public int OldShares { get; set; } = 0;
+    public int NewShares { get; set; }
 }

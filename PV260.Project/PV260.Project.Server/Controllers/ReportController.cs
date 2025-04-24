@@ -14,7 +14,7 @@ public class ReportController : ApiController
         _reportService = reportService;
     }
 
-    [HttpPost("generate", Name = "GenerateReport")]
+    [HttpPost(Name = "GenerateReport")]
     public async Task<IActionResult> GenerateDiffReport()
     {
         await _reportService.GenerateAndNotifyAsync();

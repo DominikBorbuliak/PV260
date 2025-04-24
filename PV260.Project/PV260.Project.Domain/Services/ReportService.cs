@@ -37,7 +37,9 @@ public class ReportService : IReportService
 
         var subscribedEmails = await _userRepository.GetSubscribedUserEmailsAsync();
         if (!subscribedEmails.Any())
+        {
             return;
+        }
 
         string notificationText = BuildChangeSummary(diff);
 
@@ -52,7 +54,6 @@ public class ReportService : IReportService
         await _emailSender.SendAsync(emailConfig);
     }
 
-
     private ReportDiff CreateReportDiff(IList<ArkFundsHolding> oldReport, IList<ArkFundsHolding> newReport)
     {
         var diff = new ReportDiff();
@@ -64,7 +65,6 @@ public class ReportService : IReportService
         var newDict = newReport
             .Where(h => !string.IsNullOrWhiteSpace(h.Ticker))
             .ToDictionary(h => h.Ticker);
-
 
         foreach (var (ticker, newH) in newDict)
         {
@@ -89,6 +89,7 @@ public class ReportService : IReportService
                     Ticker = ticker,
                     Company = newH.Company,
                     ChangeType = ChangeType.Added,
+                    OldShares = 0,
                     NewShares = newH.Shares
                 });
             }
@@ -102,7 +103,8 @@ public class ReportService : IReportService
                 Ticker = ticker,
                 Company = oldH.Company,
                 ChangeType = ChangeType.Removed,
-                OldShares = oldH.Shares
+                OldShares = oldH.Shares,
+                NewShares = 0
             });
         }
 
@@ -112,7 +114,9 @@ public class ReportService : IReportService
     private string BuildChangeSummary(ReportDiff diff)
     {
         if (!diff.Changes.Any())
+        {
             return "A new diff report has been generated, but no changes were detected.";
+        }
 
         var sb = new StringBuilder();
         sb.AppendLine($"A new diff report has been generated with {diff.Changes.Count} change(s):");

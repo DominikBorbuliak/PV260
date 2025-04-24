@@ -11,7 +11,7 @@ public static class ReportMapper
         {
             Id = entity.Id,
             CreatedAt = entity.CreatedAt,
-            Holdings = JsonSerializer.Deserialize<IList<ArkFundsHolding>>(entity.ReportJson) ?? new List<ArkFundsHolding>(),
+            Holdings = JsonSerializer.Deserialize<IList<ArkFundsHolding>>(entity.ReportJson) ?? [],
             Diff = JsonSerializer.Deserialize<ReportDiff>(entity.DiffJson) ?? new()
         };
     }

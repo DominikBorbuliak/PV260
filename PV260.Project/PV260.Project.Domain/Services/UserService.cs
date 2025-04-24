@@ -23,7 +23,7 @@ public class UserService : IUserService
         await _userRepository.ToggleIsSubscribedAsync(email);
     }
 
-    public async Task<List<string>> GetSubscribedEmailsAsync()
+    public async Task<IList<string>> GetSubscribedEmailsAsync()
     {
         return await _userRepository.GetSubscribedUserEmailsAsync();
     }

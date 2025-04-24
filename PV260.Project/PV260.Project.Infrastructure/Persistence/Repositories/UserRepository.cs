@@ -34,7 +34,7 @@ public class UserRepository : IUserRepository
             );
     }
 
-    public async Task<List<string>> GetSubscribedUserEmailsAsync()
+    public async Task<IList<string>> GetSubscribedUserEmailsAsync()
     {
         return await _appDbContext.Users
             .Where(u => u.IsSubscribed)

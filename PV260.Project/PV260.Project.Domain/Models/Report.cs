@@ -8,5 +8,5 @@ public class Report
 
     public DateTime CreatedAt { get; set; }
 
-    public IList<ArkFundsHolding> Holdings { get; set; } = new List<ArkFundsHolding>();
+    public required IList<ArkFundsHolding> Holdings { get; set; }
 }
