@@ -354,6 +354,45 @@
         }
       }
     },
+    "/api/ArkHoldings/getArkHoldingsDiff": {
+      "get": {
+        "tags": [
+          "ArkHoldings"
+        ],
+        "operationId": "getArkHoldingsDiff",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ArkHoldingsDiffDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ArkHoldingsDiffDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ArkHoldingsDiffDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/User/logout": {
       "post": {
         "tags": [
@@ -433,6 +472,56 @@
             "format": "int64"
           },
           "refreshToken": {
+            "type": "string"
+          }
+        }
+      },
+      "ArkHoldingsDiffDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "date2": {
+            "type": "string"
+          },
+          "fund": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          },
+          "ticker": {
+            "type": "string"
+          },
+          "cusip": {
+            "type": "string"
+          },
+          "shares": {
+            "type": "string"
+          },
+          "shares2": {
+            "type": "string"
+          },
+          "sharesDiff": {
+            "type": "string"
+          },
+          "marketValue": {
+            "type": "string"
+          },
+          "marketValue2": {
+            "type": "string"
+          },
+          "marketValueDiff": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "string"
+          },
+          "weight2": {
+            "type": "string"
+          },
+          "weightDiff": {
             "type": "string"
           }
         }
@@ -666,6 +755,9 @@
   "tags": [
     {
       "name": "PV260.Project.Server"
+    },
+    {
+      "name": "ArkHoldings"
     },
     {
       "name": "User"

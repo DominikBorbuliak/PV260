@@ -11,6 +11,7 @@ export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { AccessTokenResponse } from './models/AccessTokenResponse';
+export type { ArkHoldingsDiffDto } from './models/ArkHoldingsDiffDto';
 export type { ForgotPasswordRequest } from './models/ForgotPasswordRequest';
 export type { HttpValidationProblemDetails } from './models/HttpValidationProblemDetails';
 export type { InfoRequest } from './models/InfoRequest';
@@ -24,5 +25,6 @@ export type { TwoFactorRequest } from './models/TwoFactorRequest';
 export type { TwoFactorResponse } from './models/TwoFactorResponse';
 export type { UserDto } from './models/UserDto';
 
+export { ArkHoldingsService } from './services/ArkHoldingsService';
 export { Pv260ProjectServerService } from './services/Pv260ProjectServerService';
 export { UserService } from './services/UserService';

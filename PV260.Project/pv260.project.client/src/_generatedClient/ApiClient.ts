@@ -5,10 +5,12 @@
 import type { BaseHttpRequest } from './core/BaseHttpRequest';
 import type { OpenAPIConfig } from './core/OpenAPI';
 import { AxiosHttpRequest } from './core/AxiosHttpRequest';
+import { ArkHoldingsService } from './services/ArkHoldingsService';
 import { Pv260ProjectServerService } from './services/Pv260ProjectServerService';
 import { UserService } from './services/UserService';
 type HttpRequestConstructor = new (config: OpenAPIConfig) => BaseHttpRequest;
 export class ApiClient {
+    public readonly arkHoldings: ArkHoldingsService;
     public readonly pv260ProjectServer: Pv260ProjectServerService;
     public readonly user: UserService;
     public readonly request: BaseHttpRequest;
@@ -24,6 +26,7 @@ export class ApiClient {
             HEADERS: config?.HEADERS,
             ENCODE_PATH: config?.ENCODE_PATH,
         });
+        this.arkHoldings = new ArkHoldingsService(this.request);
         this.pv260ProjectServer = new Pv260ProjectServerService(this.request);
         this.user = new UserService(this.request);
     }
