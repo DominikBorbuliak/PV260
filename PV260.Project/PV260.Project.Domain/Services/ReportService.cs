@@ -16,7 +16,8 @@ public class ReportService : IReportService
     private readonly IUserRepository _userRepository;
     private readonly IEmailSender _emailSender;
 
-    public ReportService(IReportRepository reportRepository, IArkFundsApiRepository arkRepository, IUserRepository userRepository, IEmailSender emailSender)
+    public ReportService(IReportRepository reportRepository, IArkFundsApiRepository arkRepository,
+        IUserRepository userRepository, IEmailSender emailSender)
     {
         _reportRepository = reportRepository;
         _arkRepository = arkRepository;
@@ -46,7 +47,7 @@ public class ReportService : IReportService
         var emailConfig = new EmailConfiguration
         {
             Recipients = subscribedEmails,
-            Subject = "New ARK Diff Report Available",
+            Subject = Constants.Email.Subject,
             Message = notificationText,
             Format = TextFormat.Text
         };
@@ -115,21 +116,24 @@ public class ReportService : IReportService
     {
         if (!diff.Changes.Any())
         {
-            return "A new diff report has been generated, but no changes were detected.";
+            return Constants.Email.NoChanges;
         }
 
         var sb = new StringBuilder();
-        sb.AppendLine($"A new diff report has been generated with {diff.Changes.Count} change(s):");
+        sb.AppendLine(string.Format(Constants.Email.ChangesIntroFormat, diff.Changes.Count));
         sb.AppendLine();
 
         foreach (var change in diff.Changes)
         {
             string line = change.ChangeType switch
             {
-                ChangeType.Added => $"{change.Ticker} ({change.Company}) — Added with {change.NewShares} shares.",
-                ChangeType.Removed => $"{change.Ticker} ({change.Company}) — Removed (had {change.OldShares} shares).",
-                ChangeType.Modified => $"{change.Ticker} ({change.Company}) — Shares changed from {change.OldShares} to {change.NewShares}.",
-                _ => $"{change.Ticker} — Unknown change."
+                ChangeType.Added => string.Format(Constants.Email.ChangeAddedFormat, change.Ticker, change.Company,
+                    change.NewShares),
+                ChangeType.Removed => string.Format(Constants.Email.ChangeRemovedFormat, change.Ticker, change.Company,
+                    change.OldShares),
+                ChangeType.Modified => string.Format(Constants.Email.ChangeModifiedFormat, change.Ticker,
+                    change.Company, change.OldShares, change.NewShares),
+                _ => string.Format(Constants.Email.ChangeUnknownFormat, change.Ticker)
             };
 
             sb.AppendLine(line);
