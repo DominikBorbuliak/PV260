@@ -15,7 +15,9 @@ import { toast } from 'sonner';
 const HomePage: FC = () => {
   const queryClient = useQueryClient();
 
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string>(
+    format(new Date(), 'yyyy-MM-dd HH:mm:ss')
+  );
 
   const {
     data: reportData,
@@ -24,11 +26,9 @@ const HomePage: FC = () => {
   } = useQuery<Array<HoldingChangeDto>, ApiError>({
     queryKey: ['reportDiff', selectedDate],
     queryFn: async () => {
-      const currentDateTime = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
-      const dateToUse = selectedDate || currentDateTime;
-
-      return await apiClient.report.reportDiff({ date: dateToUse });
+      return await apiClient.report.reportDiff({ date: selectedDate });
     },
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   const { mutate: generateReport, isPending: isGenerating } = useMutation({
@@ -47,8 +47,12 @@ const HomePage: FC = () => {
     },
   });
 
-  const handleDateChange = (dateString: string) => {
-    setSelectedDate(dateString);
+  const handleDateChange = (date: any, dateString: string) => {
+    if (dateString) {
+      setSelectedDate(dateString);
+    } else {
+      setSelectedDate(format(new Date(), 'yyyy-MM-dd HH:mm:ss'));
+    }
   };
 
   return (
@@ -62,6 +66,7 @@ const HomePage: FC = () => {
                 onChange={handleDateChange}
                 format="YYYY-MM-DD HH:mm:ss"
                 showTime
+                defaultValue={null}
               />
               <Button
                 className="ml-4 hover:cursor-pointer"
