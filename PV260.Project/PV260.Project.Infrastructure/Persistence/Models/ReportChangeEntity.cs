@@ -1,7 +1,6 @@
 ﻿using PV260.Project.Domain.Models;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PV260.Project.Infrastructure.Persistence.Models;
 public class ReportChangeEntity

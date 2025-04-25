@@ -3,7 +3,7 @@ using PV260.Project.Infrastructure.Persistence.Models;
 
 namespace PV260.Project.Infrastructure.Persistence.Mappers;
 
-public static class UserMapper
+public static class UserEntityMapper
 {
     public static User ToDomainModel(this UserEntity source)
     {

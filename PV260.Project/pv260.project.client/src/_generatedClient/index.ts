@@ -25,4 +25,5 @@ export type { TwoFactorResponse } from './models/TwoFactorResponse';
 export type { UserDto } from './models/UserDto';
 
 export { Pv260ProjectServerService } from './services/Pv260ProjectServerService';
+export { ReportService } from './services/ReportService';
 export { UserService } from './services/UserService';

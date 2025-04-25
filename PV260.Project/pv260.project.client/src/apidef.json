@@ -354,6 +354,19 @@
         }
       }
     },
+    "/api/Report": {
+      "post": {
+        "tags": [
+          "Report"
+        ],
+        "operationId": "GenerateReport",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/User/logout": {
       "post": {
         "tags": [
@@ -666,6 +679,9 @@
   "tags": [
     {
       "name": "PV260.Project.Server"
+    },
+    {
+      "name": "Report"
     },
     {
       "name": "User"

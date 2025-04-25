@@ -9,10 +9,15 @@ public static class ArkFundsApiHoldingsResponseHoldingMapper
     {
         return new ArkFundsHolding
         {
-            Ticker = source.Ticker,
+            Ticker = source.Ticker ?? string.Empty,
             Company = source.Company,
-            Shares = source.Shares,
+            Shares = source.Shares ?? 0,
             Weight = source.Weight
         };
+    }
+
+    public static IList<ArkFundsHolding> ToDomainModel(this IList<ArkFundsApiHoldingsResponseHolding> source)
+    {
+        return [.. source.Select(ToDomainModel)];
     }
 }

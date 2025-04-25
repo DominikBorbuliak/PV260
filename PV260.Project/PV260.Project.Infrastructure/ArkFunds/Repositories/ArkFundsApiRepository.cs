@@ -48,8 +48,6 @@ public class ArkFundsApiRepository : IArkFundsApiRepository
         ArkFundsApiHoldingsResponse result = JsonSerializer.Deserialize<ArkFundsApiHoldingsResponse>(responseBody)
             ?? throw new HttpRequestException($"Could not deserialize response of '{uriBuilder.Uri}'");
 
-        return result.Holdings
-            .Select(h => h.ToDomainModel())
-            .ToList();
+        return result.Holdings.ToDomainModel();
     }
 }

@@ -4,7 +4,7 @@ using PV260.Project.Domain.Interfaces.Domain;
 
 namespace PV260.Project.Server.Controllers;
 
-[Authorize(Roles = "Admin")]
+[Authorize()]
 public class ReportController : ApiController
 {
     private readonly IReportService _reportService;
@@ -15,9 +15,10 @@ public class ReportController : ApiController
     }
 
     [HttpPost(Name = "GenerateReport")]
-    public async Task<IActionResult> GenerateDiffReport()
+    public async Task<ActionResult> GenerateDiffReport()
     {
         await _reportService.GenerateAndNotifyAsync();
-        return Ok(new { message = "Diff report generated and notifications sent." });
+
+        return Created();
     }
 }
