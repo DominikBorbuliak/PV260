@@ -18,6 +18,8 @@ import GenericTable from '../generic-table/GenericTable';
 import GenericTablePagination from '../generic-table/GenericTablePagination';
 import { reportDiffTableColumns } from './ReportDiffTableColumns';
 import { HoldingChangeDto } from '@/_generatedClient';
+import GenericTableFacetedFilter from '../generic-table/GenericTableFacetedFilter';
+import { useFacetedFilterOptions } from '@/hooks/generic-table-hooks';
 
 type ReportTableProps = {
   tableItems: HoldingChangeDto[];
@@ -28,6 +30,8 @@ const ReportDiffTable = ({
   tableItems,
   areTableItemsLoading,
 }: ReportTableProps) => {
+  const { getStringFacetedFilterOptions } = useFacetedFilterOptions();
+
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     id: false,
   });
@@ -60,9 +64,16 @@ const ReportDiffTable = ({
           table={table}
           resetFilters={() => table.resetColumnFilters()}
         >
-          <GenericTableInputFilter
+          <GenericTableFacetedFilter
             column={table.getColumn('ticker')}
-            placeholder="Ticker"
+            title="Ticker"
+            options={getStringFacetedFilterOptions(
+              tableItems.map((i) => i.ticker)
+            )}
+          />
+          <GenericTableInputFilter
+            column={table.getColumn('comapny')}
+            placeholder="Company"
           />
         </GenericTableSearch>
 

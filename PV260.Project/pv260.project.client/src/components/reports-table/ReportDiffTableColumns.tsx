@@ -20,6 +20,9 @@ export const reportDiffTableColumns: ColumnDef<HoldingChangeDto>[] = [
       <GenericTableColumnHeader column={column} title="Ticker" />
     ),
     cell: ({ row }) => <div>{row.getValue('ticker')}</div>,
+    filterFn: (row, id, value) => {
+      return (value as string[]).includes(row.getValue(id));
+    },
   },
   {
     accessorKey: 'shares',
