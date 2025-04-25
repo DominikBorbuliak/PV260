@@ -509,6 +509,11 @@
         }
       },
       "HoldingChangeDto": {
+        "required": [
+          "ticker",
+          "company",
+          "changeType"
+        ],
         "type": "object",
         "properties": {
           "ticker": {
@@ -527,6 +532,14 @@
           "newShares": {
             "type": "integer",
             "format": "int32"
+          },
+          "oldWeight": {
+            "type": "number",
+            "format": "double"
+          },
+          "newWeight": {
+            "type": "number",
+            "format": "double"
           }
         }
       },

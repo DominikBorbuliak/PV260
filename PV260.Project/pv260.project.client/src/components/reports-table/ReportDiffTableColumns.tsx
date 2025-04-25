@@ -44,6 +44,25 @@ export const reportDiffTableColumns: ColumnDef<HoldingChangeDto>[] = [
     ),
   },
   {
+    accessorKey: 'weight',
+    accessorFn: (row) => row.newWeight,
+    meta: 'Weight',
+    header: ({ column }) => (
+      <GenericTableColumnHeader column={column} title="Weight" />
+    ),
+    cell: ({ row }) => (
+      <div
+        className={
+          (row.original.newWeight ?? 0) - (row.original.oldWeight ?? 0) > 0
+            ? 'text-green-500'
+            : 'text-red-500'
+        }
+      >
+        {row.getValue('weight')}
+      </div>
+    ),
+  },
+  {
     accessorKey: 'changeType',
     accessorFn: (row) => row.changeType,
     meta: 'Change',

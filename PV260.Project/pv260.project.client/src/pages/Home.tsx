@@ -1,6 +1,6 @@
 import { AuthorizedView } from '@/components/AuthorizedView';
 import { Button } from '@/components/ui/button';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Navbar } from '@/components/Navbar.tsx';
 import { DatePicker } from 'antd';
 import Footer from '@/components/Footer.tsx';
@@ -14,16 +14,20 @@ import { toast } from 'sonner';
 
 const HomePage: FC = () => {
   const queryClient = useQueryClient();
-  const currentDateTime = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   const {
     data: reportData,
     isLoading,
     isError,
   } = useQuery<Array<HoldingChangeDto>, ApiError>({
-    queryKey: ['reportDiff'],
+    queryKey: ['reportDiff', selectedDate],
     queryFn: async () => {
-      return await apiClient.report.reportDiff({ date: currentDateTime });
+      const currentDateTime = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+      const dateToUse = selectedDate || currentDateTime;
+
+      return await apiClient.report.reportDiff({ date: dateToUse });
     },
   });
 
@@ -43,6 +47,10 @@ const HomePage: FC = () => {
     },
   });
 
+  const handleDateChange = (dateString: string) => {
+    setSelectedDate(dateString);
+  };
+
   return (
     <AuthorizedView>
       <div className="container mx-auto">
@@ -50,7 +58,11 @@ const HomePage: FC = () => {
         <div className="mt-10">
           <div className="flex flex-col bg-muted py-6 px-4 rounded-xl shadow-md">
             <div className="flex justify-between items-center mb-6">
-              <DatePicker />
+              <DatePicker
+                onChange={handleDateChange}
+                format="YYYY-MM-DD HH:mm:ss"
+                showTime
+              />
               <Button
                 className="ml-4 hover:cursor-pointer"
                 onClick={() => generateReport()}

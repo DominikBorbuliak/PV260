@@ -3,10 +3,12 @@
 /* tslint:disable */
 /* eslint-disable */
 export type HoldingChangeDto = {
-    ticker?: string;
-    company?: string;
-    changeType?: string;
+    ticker: string;
+    company: string;
+    changeType: string;
     oldShares?: number;
     newShares?: number;
+    oldWeight?: number;
+    newWeight?: number;
 };
 
