@@ -9,8 +9,8 @@ public class ReportEntity
 
     public DateTime CreatedAt { get; set; }
 
-    public ICollection<ReportHoldingEntity> Holdings { get; set; } = new List<ReportHoldingEntity>();
+    public virtual ICollection<ReportHoldingEntity> Holdings { get; set; } = new List<ReportHoldingEntity>();
 
-    public ICollection<ReportChangeEntity> Changes { get; set; } = new List<ReportChangeEntity>();
+    public virtual ICollection<ReportChangeEntity> Changes { get; set; } = new List<ReportChangeEntity>();
 }
 

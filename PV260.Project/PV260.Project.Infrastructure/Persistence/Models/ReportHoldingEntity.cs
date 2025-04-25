@@ -11,9 +11,8 @@ public class ReportHoldingEntity
     public Guid ReportId { get; set; }
 
     [ForeignKey(nameof(ReportId))]
-    public ReportEntity? Report { get; set; }
+    public virtual ReportEntity? Report { get; set; }
 
-    [Required]
     public string Ticker { get; set; } = string.Empty;
 
     public string Company { get; set; } = string.Empty;
