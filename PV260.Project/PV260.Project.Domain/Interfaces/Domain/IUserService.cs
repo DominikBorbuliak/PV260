@@ -7,4 +7,6 @@ public interface IUserService
     Task<User> GetUserByEmailAsync(string email);
 
     Task ToggleIsSubscribedAsync(string email);
+
+    Task<IList<string>> GetSubscribedEmailsAsync();
 }
