@@ -2,9 +2,9 @@
 
 public class HoldingChangeDto
 {
-    public string Ticker { get; set; } = string.Empty;
-    public string Company { get; set; } = string.Empty;
-    public string ChangeType { get; set; } = string.Empty;
-    public int OldShares { get; set; } = 0;
+    public required string Ticker { get; set; }
+    public required string Company { get; set; }
+    public required string ChangeType { get; set; }
+    public int OldShares { get; set; }
     public int NewShares { get; set; }
 }

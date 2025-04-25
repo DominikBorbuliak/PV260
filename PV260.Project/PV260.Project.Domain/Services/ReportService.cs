@@ -87,7 +87,9 @@ public class ReportService : IReportService
                     Company = newH.Company,
                     ChangeType = oldH == null ? ChangeType.Added : ChangeType.Modified,
                     OldShares = oldH?.Shares ?? 0,
-                    NewShares = newH.Shares
+                    NewShares = newH.Shares,
+                    OldWeight = oldH?.Weight ?? 0,
+                    NewWeight = newH.Weight
                 });
             }
         }
@@ -101,7 +103,8 @@ public class ReportService : IReportService
                 Ticker = ticker,
                 Company = oldH.Company,
                 ChangeType = ChangeType.Removed,
-                OldShares = oldH.Shares
+                OldShares = oldH.Shares,
+                OldWeight = oldH.Weight
             });
         }
 

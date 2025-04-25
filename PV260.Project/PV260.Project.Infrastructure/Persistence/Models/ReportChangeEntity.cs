@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PV260.Project.Infrastructure.Persistence.Models;
+
 public class ReportChangeEntity
 {
     [Key]
@@ -21,6 +22,11 @@ public class ReportChangeEntity
     public ChangeType ChangeType { get; set; }
 
     public int OldShares { get; set; }
+
     public int NewShares { get; set; }
+
+    public decimal OldWeight { get; set; }
+
+    public decimal NewWeight { get; set; }
 }
 

@@ -13,7 +13,9 @@ public static class ReportChangeEntityMapper
             Company = source.Company,
             ChangeType = source.ChangeType,
             OldShares = source.OldShares,
-            NewShares = source.NewShares
+            NewShares = source.NewShares,
+            OldWeight = source.OldWeight,
+            NewWeight = source.NewWeight
         };
     }
 
@@ -30,7 +32,9 @@ public static class ReportChangeEntityMapper
             Company = source.Company,
             ChangeType = source.ChangeType,
             OldShares = source.OldShares,
-            NewShares = source.NewShares
+            NewShares = source.NewShares,
+            OldWeight = source.OldWeight,
+            NewWeight = source.NewWeight
         };
     }
 
