@@ -2,7 +2,7 @@
 
 public class ArkFundsHolding
 {
-    public required string Ticker { get; set; }
+    public string? Ticker { get; set; }
 
     public required string Company { get; set; }
 
