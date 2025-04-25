@@ -54,6 +54,15 @@ public class ReportService : IReportService
         await _emailSender.SendAsync(emailConfig);
     }
 
+    public async Task<IList<HoldingChange>> GetClosestPreviousReportDiffAsync(DateTime? date)
+    {
+        Report? report = date.HasValue
+            ? await _reportRepository.GetClosestPreviousReportAsync(date.Value)
+            : await _reportRepository.GetLatestReportAsync();
+
+        return report?.Diff ?? [];
+    }
+
     private static ReportDiff CreateReportDiff(IList<ArkFundsHolding> oldReport, IList<ArkFundsHolding> newReport)
     {
         var diff = new ReportDiff();

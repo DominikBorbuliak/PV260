@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PV260.Project.Domain.Interfaces.Domain;
+using PV260.Project.Domain.Models;
+using PV260.Project.Server.Dtos;
+using PV260.Project.Server.Mappers;
 
 namespace PV260.Project.Server.Controllers;
 
@@ -20,5 +23,13 @@ public class ReportController : ApiController
         await _reportService.GenerateAndNotifyAsync();
 
         return Created();
+    }
+
+    [HttpGet(Name = "ReportDiff")]
+    public async Task<ActionResult<IList<HoldingChangeDto>>> ReportDiff(DateTime? date)
+    {
+        IList<HoldingChange> holdingChanges = await _reportService.GetClosestPreviousReportDiffAsync(date);
+
+        return Ok(holdingChanges.ToDto());
     }
 }

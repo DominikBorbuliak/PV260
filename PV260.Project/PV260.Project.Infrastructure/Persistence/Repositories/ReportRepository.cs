@@ -37,4 +37,14 @@ public class ReportRepository : IReportRepository
 
         return report?.ToDomainModel();
     }
+
+    public async Task<Report?> GetClosestPreviousReportAsync(DateTime date)
+    {
+        ReportEntity? report = await _appDbContext.Reports
+            .Where(r => r.CreatedAt < date && r.Changes.Count > 0)
+            .OrderByDescending(r => r.CreatedAt)
+            .FirstOrDefaultAsync();
+
+        return report?.ToDomainModel();
+    }
 }
