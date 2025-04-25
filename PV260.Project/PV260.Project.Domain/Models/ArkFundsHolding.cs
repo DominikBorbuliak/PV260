@@ -6,7 +6,7 @@ public class ArkFundsHolding
 
     public required string Company { get; set; }
 
-    public required int Shares { get; set; }
+    public int Shares { get; set; }
 
     public required decimal Weight { get; set; }
 }
