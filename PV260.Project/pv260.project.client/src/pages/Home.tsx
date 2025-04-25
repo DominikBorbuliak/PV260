@@ -47,8 +47,8 @@ const HomePage: FC = () => {
     },
   });
 
-  const handleDateChange = (date: any, dateString: string) => {
-    if (dateString) {
+  const handleDateChange = (_: unknown, dateString: string | string[]) => {
+    if (typeof dateString === 'string' && dateString) {
       setSelectedDate(dateString);
     } else {
       setSelectedDate(format(new Date(), 'yyyy-MM-dd HH:mm:ss'));
