@@ -3,6 +3,7 @@ import { Separator } from '@/components/ui/separator';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/services/api/base';
 import { useUser } from '@/contexts/UserContext';
+import { toast } from 'sonner';
 
 const Footer = () => {
   const queryClient = useQueryClient();
@@ -17,6 +18,11 @@ const Footer = () => {
       queryClient.invalidateQueries({
         queryKey: ['me'],
       });
+
+      toast.success('Subscription status updated successfully!');
+    },
+    onError: () => {
+      toast.error('Failed to update subscription status. Please try again.');
     },
   });
 

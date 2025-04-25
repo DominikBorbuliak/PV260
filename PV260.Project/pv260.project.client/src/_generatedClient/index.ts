@@ -12,6 +12,7 @@ export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { AccessTokenResponse } from './models/AccessTokenResponse';
 export type { ForgotPasswordRequest } from './models/ForgotPasswordRequest';
+export type { HoldingChangeDto } from './models/HoldingChangeDto';
 export type { HttpValidationProblemDetails } from './models/HttpValidationProblemDetails';
 export type { InfoRequest } from './models/InfoRequest';
 export type { InfoResponse } from './models/InfoResponse';

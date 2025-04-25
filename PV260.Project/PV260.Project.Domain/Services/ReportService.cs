@@ -54,6 +54,15 @@ public class ReportService : IReportService
         await _emailSender.SendAsync(emailConfig);
     }
 
+    public async Task<IList<HoldingChange>> GetClosestPreviousReportDiffAsync(DateTime? date)
+    {
+        Report? report = date.HasValue
+            ? await _reportRepository.GetClosestPreviousReportAsync(date.Value)
+            : await _reportRepository.GetLatestReportAsync();
+
+        return report?.Diff ?? [];
+    }
+
     private static ReportDiff CreateReportDiff(IList<ArkFundsHolding> oldReport, IList<ArkFundsHolding> newReport)
     {
         var diff = new ReportDiff();
@@ -78,7 +87,9 @@ public class ReportService : IReportService
                     Company = newH.Company,
                     ChangeType = oldH == null ? ChangeType.Added : ChangeType.Modified,
                     OldShares = oldH?.Shares ?? 0,
-                    NewShares = newH.Shares
+                    NewShares = newH.Shares,
+                    OldWeight = oldH?.Weight ?? 0,
+                    NewWeight = newH.Weight
                 });
             }
         }
@@ -92,7 +103,8 @@ public class ReportService : IReportService
                 Ticker = ticker,
                 Company = oldH.Company,
                 ChangeType = ChangeType.Removed,
-                OldShares = oldH.Shares
+                OldShares = oldH.Shares,
+                OldWeight = oldH.Weight
             });
         }
 
