@@ -1,4 +1,3 @@
-import { useFacetedFilterOptions } from '@/hooks/generic-table-hooks';
 import {
   getCoreRowModel,
   getFacetedRowModel,
@@ -11,27 +10,24 @@ import {
   VisibilityState,
 } from '@tanstack/react-table';
 import { useState } from 'react';
-import { exampleTableColumns } from './ExampleTableColumns';
 import GenericTableSearch from '../generic-table/GenericTableSearch';
-import GenericTableFacetedFilter from '../generic-table/GenericTableFacetedFilter';
-import { ExampleType } from './ExampleType';
 import GenericTableInputFilter from '../generic-table/GenericTableInputFilter';
 import GenericTableExportDropdown from '../generic-table/GenericTableExportDropdown';
 import GenericTableColumnDropdown from '../generic-table/GenericTableColumnDropdown';
 import GenericTable from '../generic-table/GenericTable';
 import GenericTablePagination from '../generic-table/GenericTablePagination';
+import { reportDiffTableColumns } from './ReportDiffTableColumns';
+import { HoldingChangeDto } from '@/_generatedClient';
 
-type ExampleTableProps = {
-  tableItems: ExampleType[];
+type ReportTableProps = {
+  tableItems: HoldingChangeDto[];
   areTableItemsLoading: boolean; // attribute from useQuery
 };
 
-const ExampleTable = ({
+const ReportDiffTable = ({
   tableItems,
   areTableItemsLoading,
-}: ExampleTableProps) => {
-  const { getStringFacetedFilterOptions } = useFacetedFilterOptions();
-
+}: ReportTableProps) => {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     id: false,
   });
@@ -42,7 +38,7 @@ const ExampleTable = ({
 
   const table = useReactTable({
     data: tableItems,
-    columns: exampleTableColumns,
+    columns: reportDiffTableColumns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -64,16 +60,9 @@ const ExampleTable = ({
           table={table}
           resetFilters={() => table.resetColumnFilters()}
         >
-          <GenericTableFacetedFilter
-            column={table.getColumn('role')}
-            title="Role"
-            options={getStringFacetedFilterOptions(
-              tableItems.map((i) => i.role)
-            )}
-          />
           <GenericTableInputFilter
-            column={table.getColumn('name')}
-            placeholder="Name"
+            column={table.getColumn('ticker')}
+            placeholder="Ticker"
           />
         </GenericTableSearch>
 
@@ -92,4 +81,4 @@ const ExampleTable = ({
   );
 };
 
-export default ExampleTable;
+export default ReportDiffTable;

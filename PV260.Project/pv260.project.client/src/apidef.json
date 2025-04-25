@@ -365,6 +365,53 @@
             "description": "OK"
           }
         }
+      },
+      "get": {
+        "tags": [
+          "Report"
+        ],
+        "operationId": "ReportDiff",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HoldingChangeDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HoldingChangeDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HoldingChangeDto"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/User/logout": {
@@ -458,6 +505,28 @@
         "properties": {
           "email": {
             "type": "string"
+          }
+        }
+      },
+      "HoldingChangeDto": {
+        "type": "object",
+        "properties": {
+          "ticker": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          },
+          "changeType": {
+            "type": "string"
+          },
+          "oldShares": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "newShares": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

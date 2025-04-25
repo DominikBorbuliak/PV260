@@ -9,6 +9,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Separator } from '@radix-ui/react-separator';
 import { FormField } from '../form/Field';
 import { apiClient } from '@/services/api/base';
+import { toast } from 'sonner';
 
 const registerFormSchema = z.object({
   email: z.string().refine((value) => value.match(/.+@.+/), {
@@ -60,7 +61,10 @@ export const RegisterForm = () => {
           message:
             'Something went wrong during registration. Please try again.',
         }),
-      onSuccess: () => void navigate('/login'),
+      onSuccess: () => {
+        toast.success('Register successful!');
+        navigate('/login');
+      },
     });
   };
 

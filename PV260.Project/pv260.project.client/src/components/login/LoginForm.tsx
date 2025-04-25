@@ -9,6 +9,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Separator } from '@radix-ui/react-separator';
 import { FormField } from '../form/Field';
 import { apiClient } from '@/services/api/base';
+import { toast } from 'sonner';
 
 const loginFormSchema = z.object({
   email: z.string().refine((value) => (value.match(/.+@.+/)?.length ?? 0) > 0, {
@@ -46,7 +47,10 @@ export const LoginForm = () => {
     await loginMutation.mutateAsync(data, {
       onError: () =>
         form.setError('root', { message: 'Invalid username or password.' }),
-      onSuccess: () => void navigate('/'),
+      onSuccess: () => {
+        toast.success('Login successful!');
+        navigate('/');
+      },
     });
   };
 
