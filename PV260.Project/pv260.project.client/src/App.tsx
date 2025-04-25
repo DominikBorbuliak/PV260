@@ -1,8 +1,12 @@
+import { Toaster } from 'sonner';
+import { Router } from './Router';
+
 const App = () => {
   return (
-    <div>
-      <h1>Hello world!</h1>
-    </div>
+    <>
+      <Router />
+      <Toaster />
+    </>
   );
 };
 

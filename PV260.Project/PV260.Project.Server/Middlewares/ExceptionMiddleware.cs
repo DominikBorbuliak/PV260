@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using PV260.Project.Domain;
+using PV260.Project.Domain.Exceptions;
+using System.Net;
 
 namespace PV260.Project.Server.Middlewares;
 
@@ -30,8 +32,9 @@ public class ExceptionMiddleware
     {
         (HttpStatusCode statusCode, string message) = exception switch
         {
-            // Add custom exceptions to convert to proper HTTP status code
-            _ => (HttpStatusCode.InternalServerError, "<REPLACE_WITH_MESSAGE_FROM_CONSTANTS>")
+            UnauthorizedException => (HttpStatusCode.Unauthorized, exception.Message),
+            NotFoundException => (HttpStatusCode.NotFound, exception.Message),
+            _ => (HttpStatusCode.InternalServerError, Constants.Error.Unexpected)
         };
 
         context.Response.ContentType = "application/json";
