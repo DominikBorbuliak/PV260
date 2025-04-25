@@ -13,7 +13,9 @@ public static class HoldingChangeDtoMapper
             Company = h.Company,
             ChangeType = h.ChangeType.ToString(),
             OldShares = h.OldShares,
-            NewShares = h.NewShares
+            NewShares = h.NewShares,
+            OldWeight = h.OldWeight,
+            NewWeight = h.NewWeight
         }).ToList();
     }
 }
