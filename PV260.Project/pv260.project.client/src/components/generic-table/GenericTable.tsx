@@ -66,7 +66,7 @@ const GenericTable = <T,>({
                 colSpan={table.getAllLeafColumns().length}
                 className="h-24 text-center text-2xl"
               >
-                {isLoading ? 'Načítání dat' : 'Žádná data'}
+                {isLoading ? 'Loading data' : 'No data'}
               </TableCell>
             </TableRow>
           )}

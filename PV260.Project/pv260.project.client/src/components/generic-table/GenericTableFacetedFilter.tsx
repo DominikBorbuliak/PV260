@@ -49,8 +49,7 @@ const GenericTableFacetedFilter = <T, U>({
               <div className="hidden space-x-1 lg:flex">
                 {selectedValues.size > 1 ? (
                   <Badge className="rounded-sm px-1 font-normal">
-                    {selectedValues.size}{' '}
-                    {selectedValues.size < 4 ? 'označené' : 'označených'}
+                    {selectedValues.size} selected
                   </Badge>
                 ) : (
                   options
@@ -120,7 +119,7 @@ const GenericTableFacetedFilter = <T, U>({
                     onSelect={() => column?.setFilterValue(undefined)}
                     className="justify-center text-center"
                   >
-                    Vymazat filtr
+                    Clear filter
                   </CommandItem>
                 </CommandGroup>
               </>
