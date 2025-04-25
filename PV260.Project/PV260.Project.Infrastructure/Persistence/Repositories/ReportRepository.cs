@@ -1,7 +1,8 @@
-﻿using PV260.Project.Domain.Models;
-using PV260.Project.Infrastructure.Persistence.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using PV260.Project.Domain.Interfaces.Infrastructure.Persistence;
+using PV260.Project.Domain.Models;
 using PV260.Project.Infrastructure.Persistence.Mappers;
+using PV260.Project.Infrastructure.Persistence.Models;
 
 namespace PV260.Project.Infrastructure.Persistence.Repositories;
 
@@ -19,31 +20,18 @@ public class ReportRepository : IReportRepository
         var report = new ReportEntity()
         {
             CreatedAt = DateTime.UtcNow,
-            Holdings = holdings.Select(h => new ReportHoldingEntity
-            {
-                Ticker = h.Ticker,
-                Company = h.Company,
-                Shares = h.Shares,
-                Weight = h.Weight
-            }).ToList(),
-
-            Changes = diff.Changes.Select(c => new ReportChangeEntity
-            {
-                Ticker = c.Ticker,
-                Company = c.Company,
-                ChangeType = c.ChangeType,
-                OldShares = c.OldShares,
-                NewShares = c.NewShares
-            }).ToList()
+            Holdings = holdings.FromDomainModel(),
+            Changes = diff.Changes.FromDomainModel()
         };
 
-        _appDbContext.Reports.Add(report);
-        await _appDbContext.SaveChangesAsync();
+        _ = _appDbContext.Reports.Add(report);
+
+        _ = await _appDbContext.SaveChangesAsync();
     }
 
     public async Task<Report?> GetLatestReportAsync()
     {
-        var report =  await _appDbContext.Reports
+        ReportEntity? report = await _appDbContext.Reports
             .OrderByDescending(r => r.CreatedAt)
             .FirstOrDefaultAsync();
 

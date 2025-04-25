@@ -5,7 +5,6 @@ using PV260.Project.Domain.Interfaces.Infrastructure.Email;
 using PV260.Project.Domain.Interfaces.Infrastructure.Persistence;
 using PV260.Project.Domain.Models;
 using System.Text;
-using PV260.Project.Infrastructure.Persistence.Repositories;
 
 namespace PV260.Project.Domain.Services;
 
@@ -27,16 +26,16 @@ public class ReportService : IReportService
 
     public async Task GenerateAndNotifyAsync()
     {
-        var currentHoldings = await _arkRepository.GetCurrentHoldingsAsync();
+        IList<ArkFundsHolding> currentHoldings = await _arkRepository.GetCurrentHoldingsAsync();
 
-        var lastReportEntity = await _reportRepository.GetLatestReportAsync();
+        Report? lastReportEntity = await _reportRepository.GetLatestReportAsync();
         IList<ArkFundsHolding> previousHoldings = lastReportEntity?.Holdings ?? [];
 
-        var diff = CreateReportDiff(previousHoldings, currentHoldings);
+        ReportDiff diff = CreateReportDiff(previousHoldings, currentHoldings);
 
         await _reportRepository.SaveReportAsync(currentHoldings, diff);
 
-        var subscribedEmails = await _userRepository.GetSubscribedUserEmailsAsync();
+        IList<string> subscribedEmails = await _userRepository.GetSubscribedUserEmailsAsync();
         if (!subscribedEmails.Any())
         {
             return;
@@ -55,7 +54,7 @@ public class ReportService : IReportService
         await _emailSender.SendAsync(emailConfig);
     }
 
-    private ReportDiff CreateReportDiff(IList<ArkFundsHolding> oldReport, IList<ArkFundsHolding> newReport)
+    private static ReportDiff CreateReportDiff(IList<ArkFundsHolding> oldReport, IList<ArkFundsHolding> newReport)
     {
         var diff = new ReportDiff();
 
@@ -67,9 +66,9 @@ public class ReportService : IReportService
             .Where(h => !string.IsNullOrWhiteSpace(h.Ticker))
             .ToDictionary(h => h.Ticker);
 
-        foreach (var (ticker, newH) in newDict)
+        foreach ((string ticker, ArkFundsHolding newH) in newDict)
         {
-            oldDict.TryGetValue(ticker, out var oldH);
+            _ = oldDict.TryGetValue(ticker, out ArkFundsHolding? oldH);
 
             if (oldH == null || newH.Shares != oldH.Shares)
             {
@@ -84,10 +83,10 @@ public class ReportService : IReportService
             }
         }
 
-        var removedTickers = oldDict.Keys.Except(newDict.Keys);
-        foreach (var ticker in removedTickers)
+        IEnumerable<string> removedTickers = oldDict.Keys.Except(newDict.Keys);
+        foreach (string ticker in removedTickers)
         {
-            var oldH = oldDict[ticker];
+            ArkFundsHolding oldH = oldDict[ticker];
             diff.Changes.Add(new HoldingChange
             {
                 Ticker = ticker,
@@ -100,7 +99,7 @@ public class ReportService : IReportService
         return diff;
     }
 
-    private string BuildChangeSummary(ReportDiff diff)
+    private static string BuildChangeSummary(ReportDiff diff)
     {
         if (!diff.Changes.Any())
         {
@@ -108,10 +107,10 @@ public class ReportService : IReportService
         }
 
         var sb = new StringBuilder();
-        sb.AppendLine(string.Format(Constants.Email.ChangesIntroFormat, diff.Changes.Count));
-        sb.AppendLine();
+        _ = sb.AppendLine(string.Format(Constants.Email.ChangesIntroFormat, diff.Changes.Count));
+        _ = sb.AppendLine();
 
-        foreach (var change in diff.Changes)
+        foreach (HoldingChange change in diff.Changes)
         {
             string line = change.ChangeType switch
             {
@@ -124,7 +123,7 @@ public class ReportService : IReportService
                 _ => string.Format(Constants.Email.ChangeUnknownFormat, change.Ticker)
             };
 
-            sb.AppendLine(line);
+            _ = sb.AppendLine(line);
         }
 
         return sb.ToString();

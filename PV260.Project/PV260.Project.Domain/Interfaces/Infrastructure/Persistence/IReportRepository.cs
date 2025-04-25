@@ -1,7 +1,6 @@
 ﻿using PV260.Project.Domain.Models;
-using System.Text.Json;
 
-namespace PV260.Project.Infrastructure.Persistence.Repositories;
+namespace PV260.Project.Domain.Interfaces.Infrastructure.Persistence;
 
 public interface IReportRepository
 {

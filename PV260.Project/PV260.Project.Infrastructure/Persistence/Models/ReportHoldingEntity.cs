@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PV260.Project.Infrastructure.Persistence.Models;
 public class ReportHoldingEntity
@@ -11,9 +11,8 @@ public class ReportHoldingEntity
     public Guid ReportId { get; set; }
 
     [ForeignKey(nameof(ReportId))]
-    public ReportEntity? Report { get; set; }
+    public virtual ReportEntity? Report { get; set; }
 
-    [Required]
     public string Ticker { get; set; } = string.Empty;
 
     public string Company { get; set; } = string.Empty;
@@ -22,5 +21,4 @@ public class ReportHoldingEntity
 
     public decimal Weight { get; set; }
 }
-
 
