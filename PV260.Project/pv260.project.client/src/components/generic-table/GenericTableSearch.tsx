@@ -34,7 +34,7 @@ const GenericTableSearch = <T,>({
     <div className="flex flex-col md:flex-row gap-2">
       <div>
         <Input
-          placeholder="Vyhledávání"
+          placeholder="Search"
           onChange={(event) => table.setGlobalFilter(event.target.value)}
           value={table.getState().globalFilter as string}
           className="flex-1 placeholder:text-foreground space-x-3 h-8 border-dashed inline-flex items-center justify-center whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 rounded-md px-3 text-xs border border-input bg-background shadow-sm"
