@@ -4,7 +4,7 @@ using PV260.Project.Domain.Interfaces.Domain;
 
 namespace PV260.Project.Server.Controllers;
 
-[Authorize()]
+[Authorize]
 public class ReportController : ApiController
 {
     private readonly IReportService _reportService;
