@@ -29,4 +29,10 @@
     <ProjectReference Include="..\PV260.Project.Infrastructure\PV260.Project.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="arkfunds.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
