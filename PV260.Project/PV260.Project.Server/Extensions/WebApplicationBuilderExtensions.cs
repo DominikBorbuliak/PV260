@@ -21,15 +21,16 @@ public static class WebApplicationBuilderExtensions
     public static WebApplicationBuilder ConfigureDatabase(this WebApplicationBuilder builder)
     {
         string sqliteConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-            ?? throw new ConfigurationException("Invalid application configuration.");
+                                        ?? throw new ConfigurationException("Invalid application configuration.");
 
         _ = builder.Services.AddDbContextFactory<AppDbContext>(options =>
         {
             _ = options
-               .UseSqlite(sqliteConnectionString)
-               .LogTo(a => Console.WriteLine(a), LogLevel.Debug)
-               .EnableSensitiveDataLogging(true)
-               .UseLazyLoadingProxies();
+                .UseSqlite(sqliteConnectionString)
+                .LogTo(a => Console.WriteLine(a), LogLevel.Debug)
+                .EnableSensitiveDataLogging(true)
+                .EnableDetailedErrors()
+                .UseLazyLoadingProxies();
         });
 
         return builder;
@@ -100,9 +101,10 @@ public static class WebApplicationBuilderExtensions
     public static WebApplicationBuilder ConfigureArkHttpClient(this WebApplicationBuilder builder)
     {
         ArkFundsApiOptions arksFundsApiOptions = builder.Configuration
-            .GetSection(ArkFundsApiOptions.Key)
-            .Get<ArkFundsApiOptions>()
-            ?? throw new ConfigurationException("Invalid application configuration.");
+                                                     .GetSection(ArkFundsApiOptions.Key)
+                                                     .Get<ArkFundsApiOptions>()
+                                                 ?? throw new ConfigurationException(
+                                                     "Invalid application configuration.");
 
         _ = builder.Services.AddHttpClient(arksFundsApiOptions.HttpClientKey, client =>
         {
