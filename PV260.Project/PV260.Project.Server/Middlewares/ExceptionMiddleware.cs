@@ -34,7 +34,7 @@ public class ExceptionMiddleware
         {
             UnauthorizedException => (HttpStatusCode.Unauthorized, exception.Message),
             NotFoundException => (HttpStatusCode.NotFound, exception.Message),
-            _ => (HttpStatusCode.InternalServerError, Constants.Error.Unexpected)
+            _ => (HttpStatusCode.InternalServerError, exception.Message)
         };
 
         context.Response.ContentType = "application/json";
