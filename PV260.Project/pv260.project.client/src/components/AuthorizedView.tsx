@@ -32,7 +32,13 @@ export const AuthorizedView: FC<AuthorizeViewProps> = ({ children }) => {
     if (error?.status === 401) {
       return <Navigate to="/login" replace />;
     }
-    return <p>Unexpected error occurred.</p>;
+    return (
+        <div>
+          <p>Status: {error?.status}</p>
+          <p>Message: {error?.message ?? "No message available"}</p>
+          <pre>{JSON.stringify(error, null, 2)}</pre>
+        </div>
+    );
   }
 
   return (
