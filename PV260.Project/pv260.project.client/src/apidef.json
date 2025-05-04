@@ -753,6 +753,13 @@
           },
           "isSubscribed": {
             "type": "boolean"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "Admin",
+              "User"
+            ]
           }
         }
       }
