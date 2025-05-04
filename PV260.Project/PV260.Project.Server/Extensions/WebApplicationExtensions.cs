@@ -1,4 +1,6 @@
-﻿using PV260.Project.Infrastructure.Persistence.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PV260.Project.Infrastructure.Persistence;
+using PV260.Project.Infrastructure.Persistence.Models;
 using PV260.Project.Server.Middlewares;
 
 namespace PV260.Project.Server.Extensions;
@@ -11,7 +13,7 @@ public static class WebApplicationExtensions
         _ = app.UseStaticFiles();
 
         _ = app.MapGroup("/api/User")
-           .MapIdentityApi<UserEntity>();
+            .MapIdentityApi<UserEntity>();
 
         if (app.Environment.IsDevelopment())
         {
@@ -28,6 +30,15 @@ public static class WebApplicationExtensions
 
         _ = app.MapFallbackToFile("/index.html");
 
+        return app;
+    }
+
+    public static WebApplication ApplyMigrations(this WebApplication app)
+    {
+        using IServiceScope scope = app.Services.CreateScope();
+        var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
+        using var db = factory.CreateDbContext();
+        db.Database.Migrate();
         return app;
     }
 }
