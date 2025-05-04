@@ -18,11 +18,26 @@ public class UserRepository : IUserRepository
 
     public async Task<User> GetUserByEmailAsync(string email)
     {
-        Models.UserEntity user = await _appDbContext.Users
-            .FirstOrDefaultAsync(u => u.Email == email)
-            ?? throw new NotFoundException(string.Format(Constants.Error.NotFoundFormat, nameof(User), nameof(email)));
+        var result = await (
+            from u in _appDbContext.Users
+            join ur in _appDbContext.UserRoles on u.Id equals ur.UserId
+            join r in _appDbContext.Roles on ur.RoleId equals r.Id
+            where u.Email == email
+            select new 
+            {
+                User = u,
+                RoleName = r.Name!
+            }
+        ).FirstOrDefaultAsync();
 
-        return user.ToDomainModel();
+        if (result == null)
+        {
+            throw new NotFoundException(
+                string.Format(Constants.Error.NotFoundFormat, nameof(User), nameof(email))
+            );
+        }
+
+        return result.User.ToDomainModel(result.RoleName);
     }
 
     public async Task ToggleIsSubscribedAsync(string email)

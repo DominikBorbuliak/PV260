@@ -10,7 +10,8 @@ public static class UserDtoMapper
         return new UserDto
         {
             Email = source.Email,
-            IsSubscribed = source.IsSubscribed
+            IsSubscribed = source.IsSubscribed,
+            Role = source.Role,
         };
     }
 }
