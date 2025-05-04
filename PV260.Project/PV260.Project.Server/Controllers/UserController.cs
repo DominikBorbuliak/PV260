@@ -10,6 +10,7 @@ using PV260.Project.Server.Mappers;
 
 namespace PV260.Project.Server.Controllers;
 
+[Authorize(Roles = "User,Admin")]
 public class UserController : ApiController
 {
     private readonly SignInManager<UserEntity> _signInManager;
