@@ -84,3 +84,11 @@ In case of problems with ssl certificate follow this steps:
 2. `dotnet dev-certs https --clean`
 3. Remove your keys and pem from `C:\Users\...\AppData\Roaming\ASP.NET\https`
 4. `dotnet dev-certs https --trust`
+
+## Pre generated users
+
+If you do not want to register you can use these provided users. 
+
+1. userEmail = "user@user.com" userPassword = "User123!"
+
+2. adminEmail = "admin@admin.com" adminPassword = "Adm!n123";

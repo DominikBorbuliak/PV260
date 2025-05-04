@@ -5,12 +5,13 @@ namespace PV260.Project.Infrastructure.Persistence.Mappers;
 
 public static class UserEntityMapper
 {
-    public static User ToDomainModel(this UserEntity source)
+    public static User ToDomainModel(this UserEntity source, string role)
     {
         return new User
         {
             Email = source.Email ?? string.Empty,
-            IsSubscribed = source.IsSubscribed
+            IsSubscribed = source.IsSubscribed,
+            Role = role
         };
     }
 }

@@ -2,16 +2,21 @@ using PV260.Project.Server.Extensions;
 
 try
 {
-    WebApplication.CreateBuilder(args)
+    WebApplication app = WebApplication.CreateBuilder(args)
         .ConfigureDatabase()
         .ConfigureOptions()
         .ConfigureServices()
         .ConfigureAuth()
         .ConfigureArkHttpClient()
         .ConfigureControllers()
-        .Build()
-        .ConfigureApplication()
-        .Run();
+        .Build();
+    
+    app.ApplyMigrations()
+        .SeedRoles()
+        .SeedAdminUser()
+        .SeedUser();
+    
+    app.ConfigureApplication().Run();
 }
 catch (Exception exception)
 {
