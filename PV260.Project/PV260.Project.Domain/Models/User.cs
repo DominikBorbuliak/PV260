@@ -6,5 +6,5 @@ public class User
 
     public bool IsSubscribed { get; set; }
     
-    public string Role { get; set; }
+    public required string Role { get; set; }
 }

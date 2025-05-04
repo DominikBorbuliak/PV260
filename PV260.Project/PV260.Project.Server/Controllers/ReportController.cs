@@ -26,7 +26,7 @@ public class ReportController : ApiController
         return Created();
     }
     
-    [Authorize(Roles = "Admin,User")]
+    [Authorize(Roles = "User,Admin")]
     [HttpGet(Name = "ReportDiff")]
     public async Task<ActionResult<IList<HoldingChangeDto>>> ReportDiff(DateTime? date)
     {

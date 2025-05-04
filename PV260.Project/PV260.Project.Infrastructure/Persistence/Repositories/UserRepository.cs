@@ -3,7 +3,9 @@ using PV260.Project.Domain;
 using PV260.Project.Domain.Exceptions;
 using PV260.Project.Domain.Interfaces.Infrastructure.Persistence;
 using PV260.Project.Domain.Models;
+using PV260.Project.Infrastructure.Persistence.Dtos;
 using PV260.Project.Infrastructure.Persistence.Mappers;
+using PV260.Project.Infrastructure.Persistence.Models;
 
 namespace PV260.Project.Infrastructure.Persistence.Repositories;
 
@@ -18,17 +20,25 @@ public class UserRepository : IUserRepository
 
     public async Task<User> GetUserByEmailAsync(string email)
     {
-        var result = await (
-            from u in _appDbContext.Users
-            join ur in _appDbContext.UserRoles on u.Id equals ur.UserId
-            join r in _appDbContext.Roles on ur.RoleId equals r.Id
-            where u.Email == email
-            select new 
-            {
-                User = u,
-                RoleName = r.Name!
-            }
-        ).FirstOrDefaultAsync();
+        var result = await _appDbContext.Users
+            .Where(u => u.Email == email)
+            .Join(
+                _appDbContext.UserRoles,
+                user => user.Id,
+                userRole => userRole.UserId,
+                (user, userRole) => new { user, userRole }
+            )
+            .Join(
+                _appDbContext.Roles,
+                temp => temp.userRole.RoleId,
+                role => role.Id,
+                (temp, role) => new UserRoleDto
+                {
+                    User = temp.user,
+                    RoleName = role.Name!
+                }
+            )
+            .FirstOrDefaultAsync();
 
         if (result == null)
         {

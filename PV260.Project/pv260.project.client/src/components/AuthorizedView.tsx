@@ -34,9 +34,7 @@ export const AuthorizedView: FC<AuthorizeViewProps> = ({ children }) => {
     }
     return (
         <div>
-          <p>Status: {error?.status}</p>
-          <p>Message: {error?.message ?? "No message available"}</p>
-          <pre>{JSON.stringify(error, null, 2)}</pre>
+          <p>An unexpected error has occurred..</p>
         </div>
     );
   }
