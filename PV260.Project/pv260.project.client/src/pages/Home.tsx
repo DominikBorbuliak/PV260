@@ -29,7 +29,6 @@ const HomePage: FC = () => {
         retry: 1,
         retryDelay: 500,
     });
-    
     const {
         data: reportData,
         isLoading,
@@ -53,11 +52,7 @@ const HomePage: FC = () => {
 
             toast.success('New report generated successfully!');
         },
-        onError: (error: unknown) => {
-            console.log(error);
-            if (error instanceof ApiError) {
-                console.log(`Status ${error.status}:`, error.body);
-            }
+        onError: () => {
             toast.error('Failed to generate report! Try again later.');
         },
     });
