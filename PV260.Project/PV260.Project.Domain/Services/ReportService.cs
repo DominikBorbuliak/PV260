@@ -10,55 +10,65 @@ namespace PV260.Project.Domain.Services;
 
 public class ReportService : IReportService
 {
-    private readonly IReportRepository _reportRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IArkFundsApiRepository _arkRepository;
-    private readonly IUserRepository _userRepository;
     private readonly IEmailSender _emailSender;
 
-    public ReportService(IReportRepository reportRepository, IArkFundsApiRepository arkRepository,
-        IUserRepository userRepository, IEmailSender emailSender)
+    public ReportService(IUnitOfWork unitOfWork, IArkFundsApiRepository arkRepository, IEmailSender emailSender)
     {
-        _reportRepository = reportRepository;
+        _unitOfWork = unitOfWork;
         _arkRepository = arkRepository;
-        _userRepository = userRepository;
         _emailSender = emailSender;
     }
 
     public async Task GenerateAndNotifyAsync()
     {
-        IList<ArkFundsHolding> currentHoldings = await _arkRepository.GetCurrentHoldingsAsync();
+        await _unitOfWork.BeginTransactionAsync();
 
-        Report? lastReportEntity = await _reportRepository.GetLatestReportAsync();
-        IList<ArkFundsHolding> previousHoldings = lastReportEntity?.Holdings ?? [];
-
-        ReportDiff diff = CreateReportDiff(previousHoldings, currentHoldings);
-
-        await _reportRepository.SaveReportAsync(currentHoldings, diff);
-
-        IList<string> subscribedEmails = await _userRepository.GetSubscribedUserEmailsAsync();
-        if (!subscribedEmails.Any())
+        try
         {
-            return;
+            IList<ArkFundsHolding> currentHoldings = await _arkRepository.GetCurrentHoldingsAsync();
+
+            Report? lastReportEntity = await _unitOfWork.ReportRepository.GetLatestReportAsync();
+            IList<ArkFundsHolding> previousHoldings = lastReportEntity?.Holdings ?? [];
+
+            ReportDiff diff = CreateReportDiff(previousHoldings, currentHoldings);
+
+            await _unitOfWork.ReportRepository.SaveReportAsync(currentHoldings, diff);
+
+            IList<string> subscribedEmails = await _unitOfWork.UserRepository.GetSubscribedUserEmailsAsync();
+            if (!subscribedEmails.Any())
+            {
+                return;
+            }
+
+            string notificationText = BuildChangeSummary(diff);
+
+            var emailConfig = new EmailConfiguration
+            {
+                Recipients = subscribedEmails,
+                Subject = Constants.Email.Subject,
+                Message = notificationText,
+                Format = TextFormat.Text
+            };
+
+            await _emailSender.SendAsync(emailConfig);
+
+            await _unitOfWork.CommitTransactionAsync();
         }
-
-        string notificationText = BuildChangeSummary(diff);
-
-        var emailConfig = new EmailConfiguration
+        catch (Exception)
         {
-            Recipients = subscribedEmails,
-            Subject = Constants.Email.Subject,
-            Message = notificationText,
-            Format = TextFormat.Text
-        };
+            await _unitOfWork.RollbackTransactionAsync();
 
-        await _emailSender.SendAsync(emailConfig);
+            throw;
+        }
     }
 
     public async Task<IList<HoldingChange>> GetClosestPreviousReportDiffAsync(DateTime? date)
     {
         Report? report = date.HasValue
-            ? await _reportRepository.GetClosestPreviousReportAsync(date.Value)
-            : await _reportRepository.GetLatestReportAsync();
+            ? await _unitOfWork.ReportRepository.GetClosestPreviousReportAsync(date.Value)
+            : await _unitOfWork.ReportRepository.GetLatestReportAsync();
 
         return report?.Diff ?? [];
     }

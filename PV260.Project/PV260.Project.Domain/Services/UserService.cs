@@ -6,25 +6,25 @@ namespace PV260.Project.Domain.Services;
 
 public class UserService : IUserService
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public UserService(IUserRepository userRepository)
+    public UserService(IUnitOfWork unitOfWork)
     {
-        _userRepository = userRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<User> GetUserByEmailAsync(string email)
     {
-        return await _userRepository.GetUserByEmailAsync(email);
+        return await _unitOfWork.UserRepository.GetUserByEmailAsync(email);
     }
 
     public async Task ToggleIsSubscribedAsync(string email)
     {
-        await _userRepository.ToggleIsSubscribedAsync(email);
+        await _unitOfWork.UserRepository.ToggleIsSubscribedAsync(email);
     }
 
     public async Task<IList<string>> GetSubscribedEmailsAsync()
     {
-        return await _userRepository.GetSubscribedUserEmailsAsync();
+        return await _unitOfWork.UserRepository.GetSubscribedUserEmailsAsync();
     }
 }
