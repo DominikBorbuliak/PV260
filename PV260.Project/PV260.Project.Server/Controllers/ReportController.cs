@@ -16,7 +16,8 @@ public class ReportController : ApiController
     {
         _reportService = reportService;
     }
-
+    
+    [Authorize(Roles = "Admin")]
     [HttpPost(Name = "GenerateReport")]
     public async Task<ActionResult> GenerateDiffReport()
     {
@@ -24,7 +25,8 @@ public class ReportController : ApiController
 
         return Created();
     }
-
+    
+    [Authorize(Roles = "User,Admin")]
     [HttpGet(Name = "ReportDiff")]
     public async Task<ActionResult<IList<HoldingChangeDto>>> ReportDiff(DateTime? date)
     {
