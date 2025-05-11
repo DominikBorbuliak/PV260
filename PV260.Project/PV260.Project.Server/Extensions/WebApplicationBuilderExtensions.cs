@@ -94,6 +94,8 @@ public static class WebApplicationBuilderExtensions
         _ = builder.Services.AddScoped<IUserRepository, UserRepository>();
         _ = builder.Services.AddScoped<IReportRepository, ReportRepository>();
 
+        _ = builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
         _ = builder.Services.AddScoped<IUserService, UserService>();
         _ = builder.Services.AddScoped<IEmailSender, EmailSender>();
         _ = builder.Services.AddScoped<IReportService, ReportService>();
