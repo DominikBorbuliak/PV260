@@ -756,10 +756,7 @@
           },
           "role": {
             "type": "string",
-            "enum": [
-              "Admin",
-              "User"
-            ]
+            "nullable": true
           }
         }
       }

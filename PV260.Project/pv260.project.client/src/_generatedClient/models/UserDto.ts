@@ -5,6 +5,6 @@
 export type UserDto = {
     email: string;
     isSubscribed?: boolean;
-    role: string;
+    role?: string | null;
 };
 

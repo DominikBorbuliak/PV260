@@ -9,6 +9,7 @@ try
         .ConfigureAuth()
         .ConfigureArkHttpClient()
         .ConfigureControllers()
+        .ConfigureQuartzJobs()
         .Build();
 
     _ = app.ApplyMigrations()
