@@ -13,6 +13,9 @@ using PV260.Project.Infrastructure.Email;
 using PV260.Project.Infrastructure.Persistence;
 using PV260.Project.Infrastructure.Persistence.Models;
 using PV260.Project.Infrastructure.Persistence.Repositories;
+using PV260.Project.Server.Jobs;
+using Quartz;
+using Quartz.AspNetCore;
 
 namespace PV260.Project.Server.Extensions;
 
@@ -21,15 +24,16 @@ public static class WebApplicationBuilderExtensions
     public static WebApplicationBuilder ConfigureDatabase(this WebApplicationBuilder builder)
     {
         string sqliteConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-            ?? throw new ConfigurationException("Invalid application configuration.");
+                                        ?? throw new ConfigurationException("Invalid application configuration.");
 
         _ = builder.Services.AddDbContextFactory<AppDbContext>(options =>
         {
             _ = options
-               .UseSqlite(sqliteConnectionString)
-               .LogTo(a => Console.WriteLine(a), LogLevel.Debug)
-               .EnableSensitiveDataLogging(true)
-               .UseLazyLoadingProxies();
+                .UseSqlite(sqliteConnectionString)
+                .LogTo(a => Console.WriteLine(a), LogLevel.Debug)
+                .EnableSensitiveDataLogging(true)
+                .EnableDetailedErrors()
+                .UseLazyLoadingProxies();
         });
 
         return builder;
@@ -100,9 +104,10 @@ public static class WebApplicationBuilderExtensions
     public static WebApplicationBuilder ConfigureArkHttpClient(this WebApplicationBuilder builder)
     {
         ArkFundsApiOptions arksFundsApiOptions = builder.Configuration
-            .GetSection(ArkFundsApiOptions.Key)
-            .Get<ArkFundsApiOptions>()
-            ?? throw new ConfigurationException("Invalid application configuration.");
+                                                     .GetSection(ArkFundsApiOptions.Key)
+                                                     .Get<ArkFundsApiOptions>()
+                                                 ?? throw new ConfigurationException(
+                                                     "Invalid application configuration.");
 
         _ = builder.Services.AddHttpClient(arksFundsApiOptions.HttpClientKey, client =>
         {
@@ -117,6 +122,28 @@ public static class WebApplicationBuilderExtensions
     {
         _ = builder.Services.AddControllers();
         _ = builder.Services.AddOpenApi();
+
+        return builder;
+    }
+
+    public static WebApplicationBuilder ConfigureQuartzJobs(this WebApplicationBuilder builder)
+    {
+        _ = builder.Services.AddTransient<IJob, GenerateReportJob>();
+
+        _ = builder.Services.AddQuartz(q =>
+        {
+            var generateReportJobKey = new JobKey("GenerateReportJob");
+
+            _ = q.AddJob<GenerateReportJob>(opt => opt.WithIdentity(generateReportJobKey));
+
+            _ = q.AddTrigger(opts => opts
+                    .ForJob(generateReportJobKey)
+                    .WithIdentity("GenerateReportJob-trigger")
+                    .WithCronSchedule("0 0 2 ? * * *") // At 02:00:00am every day
+                );
+        });
+
+        _ = builder.Services.AddQuartzServer(opt => opt.WaitForJobsToComplete = true);
 
         return builder;
     }

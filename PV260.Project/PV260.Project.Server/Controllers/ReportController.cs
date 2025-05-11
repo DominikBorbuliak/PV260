@@ -17,6 +17,7 @@ public class ReportController : ApiController
         _reportService = reportService;
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost(Name = "GenerateReport")]
     public async Task<ActionResult> GenerateDiffReport()
     {
