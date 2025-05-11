@@ -3,7 +3,6 @@ using PV260.Project.Domain;
 using PV260.Project.Domain.Exceptions;
 using PV260.Project.Domain.Interfaces.Infrastructure.Persistence;
 using PV260.Project.Domain.Models;
-using PV260.Project.Infrastructure.Persistence.Dtos;
 using PV260.Project.Infrastructure.Persistence.Mappers;
 using PV260.Project.Infrastructure.Persistence.Models;
 
@@ -20,34 +19,23 @@ public class UserRepository : IUserRepository
 
     public async Task<User> GetUserByEmailAsync(string email)
     {
-        var result = await _appDbContext.Users
-            .Where(u => u.Email == email)
-            .Join(
-                _appDbContext.UserRoles,
-                user => user.Id,
-                userRole => userRole.UserId,
-                (user, userRole) => new { user, userRole }
-            )
+        UserEntity userEntity = await _appDbContext.Users
+            .FirstOrDefaultAsync(u => u.Email == email) ?? throw new NotFoundException(string.Format(Constants.Error.NotFoundFormat, nameof(User), nameof(email)));
+
+        var userRole = await _appDbContext.UserRoles
             .Join(
                 _appDbContext.Roles,
-                temp => temp.userRole.RoleId,
-                role => role.Id,
-                (temp, role) => new UserRoleDto
+                ur => ur.RoleId,
+                r => r.Id,
+                (ur, r) => new
                 {
-                    User = temp.user,
-                    RoleName = role.Name!
+                    UserId = ur.UserId,
+                    RoleName = r.Name
                 }
             )
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(ur => ur.UserId == userEntity.Id);
 
-        if (result == null)
-        {
-            throw new NotFoundException(
-                string.Format(Constants.Error.NotFoundFormat, nameof(User), nameof(email))
-            );
-        }
-
-        return result.User.ToDomainModel(result.RoleName);
+        return userEntity.ToDomainModel(userRole?.RoleName);
     }
 
     public async Task ToggleIsSubscribedAsync(string email)

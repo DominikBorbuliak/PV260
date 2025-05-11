@@ -42,30 +42,30 @@ public static class WebApplicationExtensions
         db.Database.Migrate();
         return app;
     }
-    
+
     public static WebApplication SeedRoles(this WebApplication app)
     {
         using IServiceScope scope = app.Services.CreateScope();
         RoleManager<RoleEntity> roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<RoleEntity>>();
 
-        foreach (string roleName in new[] { "Admin", "User" })
+        foreach (string roleName in new[] { "Admin" })
         {
             if (!roleManager.RoleExistsAsync(roleName).GetAwaiter().GetResult())
             {
-                roleManager.CreateAsync(new RoleEntity { Name = roleName })
+                _ = roleManager.CreateAsync(new RoleEntity { Name = roleName })
                     .GetAwaiter().GetResult();
             }
         }
 
         return app;
     }
-    
+
     public static WebApplication SeedAdminUser(this WebApplication app)
     {
         using IServiceScope scope = app.Services.CreateScope();
         UserManager<UserEntity> userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserEntity>>();
 
-        const string adminEmail    = "admin@admin.com";
+        const string adminEmail = "admin@admin.com";
         const string adminPassword = "Adm!n123";
 
         if (userManager.FindByEmailAsync(adminEmail).GetAwaiter().GetResult() is not null)
@@ -75,8 +75,8 @@ public static class WebApplicationExtensions
 
         var admin = new UserEntity
         {
-            UserName       = adminEmail,
-            Email          = adminEmail,
+            UserName = adminEmail,
+            Email = adminEmail,
             EmailConfirmed = true
         };
 
@@ -89,18 +89,18 @@ public static class WebApplicationExtensions
                 $"Seeding admin user failed: {string.Join("; ", result.Errors.Select(e => e.Description))}");
         }
 
-        userManager.AddToRoleAsync(admin, "Admin")
+        _ = userManager.AddToRoleAsync(admin, "Admin")
             .GetAwaiter().GetResult();
 
         return app;
     }
-    
+
     public static WebApplication SeedUser(this WebApplication app)
     {
         using IServiceScope scope = app.Services.CreateScope();
         UserManager<UserEntity> userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserEntity>>();
 
-        const string userEmail    = "user@user.com";
+        const string userEmail = "user@user.com";
         const string userPassword = "User123!";
 
         if (userManager.FindByEmailAsync(userEmail).GetAwaiter().GetResult() is not null)
@@ -110,8 +110,8 @@ public static class WebApplicationExtensions
 
         var user = new UserEntity
         {
-            UserName       = userEmail,
-            Email          = userEmail,
+            UserName = userEmail,
+            Email = userEmail,
             EmailConfirmed = true
         };
 
@@ -123,9 +123,6 @@ public static class WebApplicationExtensions
             throw new Exception(
                 $"Seeding user failed: {string.Join("; ", result.Errors.Select(e => e.Description))}");
         }
-
-        userManager.AddToRoleAsync(user, "User")
-            .GetAwaiter().GetResult();
 
         return app;
     }

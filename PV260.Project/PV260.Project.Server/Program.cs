@@ -9,13 +9,14 @@ try
         .ConfigureAuth()
         .ConfigureArkHttpClient()
         .ConfigureControllers()
+        .ConfigureQuartzJobs()
         .Build();
-    
-    app.ApplyMigrations()
+
+    _ = app.ApplyMigrations()
         .SeedRoles()
         .SeedAdminUser()
         .SeedUser();
-    
+
     app.ConfigureApplication().Run();
 }
 catch (Exception exception)
