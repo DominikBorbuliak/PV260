@@ -10,7 +10,7 @@ using PV260.Project.Server.Mappers;
 
 namespace PV260.Project.Server.Controllers;
 
-[Authorize(Roles = "User,Admin")]
+[Authorize]
 public class UserController : ApiController
 {
     private readonly SignInManager<UserEntity> _signInManager;
@@ -21,7 +21,6 @@ public class UserController : ApiController
         _userService = userService;
     }
 
-    [Authorize]
     [HttpPost("logout", Name = "logout")]
     public async Task<IResult> Logout()
     {
@@ -30,7 +29,6 @@ public class UserController : ApiController
         return Results.Ok();
     }
 
-    [Authorize]
     [HttpGet("me", Name = "getMe")]
     public async Task<ActionResult<UserDto>> GetMe()
     {
@@ -40,7 +38,6 @@ public class UserController : ApiController
         return Ok(user.ToDto());
     }
 
-    [Authorize]
     [HttpPatch("subscription", Name = "toggleSubscription")]
     public async Task<ActionResult> ToggleSubscription()
     {

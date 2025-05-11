@@ -5,7 +5,7 @@ namespace PV260.Project.Infrastructure.Persistence.Mappers;
 
 public static class UserEntityMapper
 {
-    public static User ToDomainModel(this UserEntity source, string role)
+    public static User ToDomainModel(this UserEntity source, string? role = null)
     {
         return new User
         {

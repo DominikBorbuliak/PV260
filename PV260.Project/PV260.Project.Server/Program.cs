@@ -10,12 +10,12 @@ try
         .ConfigureArkHttpClient()
         .ConfigureControllers()
         .Build();
-    
-    app.ApplyMigrations()
+
+    _ = app.ApplyMigrations()
         .SeedRoles()
         .SeedAdminUser()
         .SeedUser();
-    
+
     app.ConfigureApplication().Run();
 }
 catch (Exception exception)
