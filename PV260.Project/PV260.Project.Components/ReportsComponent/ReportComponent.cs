@@ -1,5 +1,3 @@
-
-using PV260.Project.Components.ReportsComponent.DTOs;
 using PV260.Project.Components.ReportsComponent.Services;
 using PV260.Project.Domain.Models;
 
