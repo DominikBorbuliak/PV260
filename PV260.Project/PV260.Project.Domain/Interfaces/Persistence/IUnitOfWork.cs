@@ -3,12 +3,9 @@
 public interface IUnitOfWork
 {
     IReportRepository ReportRepository { get; }
-
     IUserRepository UserRepository { get; }
 
     Task BeginTransactionAsync();
-
     Task CommitTransactionAsync();
-
     Task RollbackTransactionAsync();
 }

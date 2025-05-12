@@ -5,8 +5,6 @@ namespace PV260.Project.Domain.Interfaces.Persistence;
 public interface IReportRepository
 {
     Task SaveReportAsync(IList<ArkFundsHolding> holdings, ReportDiff diff);
-
     Task<Report?> GetLatestReportAsync();
-
     Task<Report?> GetClosestPreviousReportAsync(DateTime date);
 }

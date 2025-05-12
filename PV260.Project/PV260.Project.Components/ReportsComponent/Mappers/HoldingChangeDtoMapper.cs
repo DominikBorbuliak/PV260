@@ -5,17 +5,22 @@ namespace PV260.Project.Components.ReportsComponent.Mappers;
 
 internal static class HoldingChangeDtoMapper
 {
-    public static IList<HoldingChangeDto> ToDto(this IList<HoldingChange> holdingChanges)
+    public static HoldingChangeDto ToDto(this HoldingChange source)
     {
-        return holdingChanges.Select(h => new HoldingChangeDto
+        return new HoldingChangeDto
         {
-            Ticker = h.Ticker,
-            Company = h.Company,
-            ChangeType = h.ChangeType.ToString(),
-            OldShares = h.OldShares,
-            NewShares = h.NewShares,
-            OldWeight = h.OldWeight,
-            NewWeight = h.NewWeight
-        }).ToList();
+            Ticker = source.Ticker,
+            Company = source.Company,
+            ChangeType = source.ChangeType.ToString(),
+            OldShares = source.OldShares,
+            NewShares = source.NewShares,
+            OldWeight = source.OldWeight,
+            NewWeight = source.NewWeight
+        };
+    }
+
+    public static IList<HoldingChangeDto> ToDto(this IList<HoldingChange> source)
+    {
+        return [.. source.Select(ToDto)];
     }
 }

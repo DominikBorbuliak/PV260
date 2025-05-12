@@ -16,6 +16,7 @@ public class UserController : ApiController
 {
     private readonly SignInManager<UserEntity> _signInManager;
     private readonly IUserService _userService;
+
     public UserController(SignInManager<UserEntity> signInManager, IUserService userService)
     {
         _signInManager = signInManager;
