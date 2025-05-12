@@ -1,8 +1,7 @@
-﻿using PV260.Project.Domain.Interfaces.Domain;
-using PV260.Project.Domain.Interfaces.Infrastructure.Persistence;
+﻿using PV260.Project.Domain.Interfaces.Infrastructure.Persistence;
 using PV260.Project.Domain.Models;
 
-namespace PV260.Project.Domain.Services;
+namespace PV260.Project.Components.UsersComponent.Services;
 
 public class UserService : IUserService
 {

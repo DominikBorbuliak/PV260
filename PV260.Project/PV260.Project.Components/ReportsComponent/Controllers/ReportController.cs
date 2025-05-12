@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PV260.Project.Domain.Interfaces.Domain;
+using PV260.Project.Components.Common.Controllers;
+using PV260.Project.Components.ReportsComponent.DTOs;
+using PV260.Project.Components.ReportsComponent.Mappers;
+using PV260.Project.Components.ReportsComponent.Services;
 using PV260.Project.Domain.Models;
-using PV260.Project.Server.Dtos;
-using PV260.Project.Server.Mappers;
 
-namespace PV260.Project.Server.Controllers;
+namespace PV260.Project.Components.ReportsComponent.Controllers;
 
 [Authorize]
 public class ReportController : ApiController
@@ -23,7 +24,7 @@ public class ReportController : ApiController
     {
         await _reportService.GenerateAndNotifyAsync();
 
-        return Created();
+        return Ok();
     }
 
     [HttpGet(Name = "ReportDiff")]

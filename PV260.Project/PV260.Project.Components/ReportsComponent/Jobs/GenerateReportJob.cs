@@ -1,7 +1,7 @@
-﻿using PV260.Project.Domain.Interfaces.Domain;
+﻿using PV260.Project.Components.ReportsComponent.Services;
 using Quartz;
 
-namespace PV260.Project.Server.Jobs;
+namespace PV260.Project.Components.ReportsComponent.Jobs;
 
 public class GenerateReportJob : IJob
 {

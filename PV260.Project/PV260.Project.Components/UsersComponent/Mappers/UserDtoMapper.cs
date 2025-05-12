@@ -1,9 +1,9 @@
-﻿using PV260.Project.Domain.Models;
-using PV260.Project.Server.Dtos;
+﻿using PV260.Project.Components.UsersComponent.Dtos;
+using PV260.Project.Domain.Models;
 
-namespace PV260.Project.Server.Mappers;
+namespace PV260.Project.Components.UsersComponent.Mappers;
 
-public static class UserDtoMapper
+internal static class UserDtoMapper
 {
     public static UserDto ToDto(this User source)
     {

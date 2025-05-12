@@ -1,10 +1,10 @@
-﻿using PV260.Project.Domain;
+﻿using System.Security.Claims;
+using PV260.Project.Domain;
 using PV260.Project.Domain.Exceptions;
-using System.Security.Claims;
 
-namespace PV260.Project.Server.Extensions;
+namespace PV260.Project.Components.UsersComponent.Extensions;
 
-public static class ClaimsPrincipalExtensions
+internal static class ClaimsPrincipalExtensions
 {
     public static string GetEmail(this ClaimsPrincipal claimsPrincipal)
     {

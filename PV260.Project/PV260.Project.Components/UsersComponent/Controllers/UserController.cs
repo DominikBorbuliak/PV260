@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PV260.Project.Domain.Interfaces.Domain;
+using PV260.Project.Components.Common.Controllers;
+using PV260.Project.Components.UsersComponent.Dtos;
+using PV260.Project.Components.UsersComponent.Extensions;
+using PV260.Project.Components.UsersComponent.Mappers;
+using PV260.Project.Components.UsersComponent.Services;
 using PV260.Project.Domain.Models;
 using PV260.Project.Infrastructure.Persistence.Models;
-using PV260.Project.Server.Dtos;
-using PV260.Project.Server.Extensions;
-using PV260.Project.Server.Mappers;
 
-namespace PV260.Project.Server.Controllers;
+namespace PV260.Project.Components.UsersComponent.Controllers;
 
 [Authorize]
 public class UserController : ApiController
@@ -22,11 +23,11 @@ public class UserController : ApiController
     }
 
     [HttpPost("logout", Name = "logout")]
-    public async Task<IResult> Logout()
+    public async Task<ActionResult> Logout()
     {
         await _signInManager.SignOutAsync();
 
-        return Results.Ok();
+        return Ok();
     }
 
     [HttpGet("me", Name = "getMe")]

@@ -1,4 +1,4 @@
-﻿namespace PV260.Project.Server.Dtos;
+﻿namespace PV260.Project.Components.UsersComponent.Dtos;
 
 public class UserDto
 {

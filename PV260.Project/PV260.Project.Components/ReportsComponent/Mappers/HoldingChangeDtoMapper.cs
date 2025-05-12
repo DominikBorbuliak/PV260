@@ -1,9 +1,9 @@
-﻿using PV260.Project.Domain.Models;
-using PV260.Project.Server.Dtos;
+﻿using PV260.Project.Components.ReportsComponent.DTOs;
+using PV260.Project.Domain.Models;
 
-namespace PV260.Project.Server.Mappers;
+namespace PV260.Project.Components.ReportsComponent.Mappers;
 
-public static class HoldingChangeDtoMapper
+internal static class HoldingChangeDtoMapper
 {
     public static IList<HoldingChangeDto> ToDto(this IList<HoldingChange> holdingChanges)
     {
