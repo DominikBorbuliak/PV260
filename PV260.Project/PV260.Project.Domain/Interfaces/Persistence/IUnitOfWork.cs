@@ -1,4 +1,4 @@
-﻿namespace PV260.Project.Domain.Interfaces.Infrastructure.Persistence;
+﻿namespace PV260.Project.Domain.Interfaces.Persistence;
 
 public interface IUnitOfWork
 {

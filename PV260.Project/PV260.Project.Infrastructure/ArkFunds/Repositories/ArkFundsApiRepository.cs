@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using PV260.Project.Domain.Exceptions;
-using PV260.Project.Domain.Interfaces.Infrastructure.ArkFunds;
+using PV260.Project.Domain.Interfaces.ArkFunds;
 using PV260.Project.Domain.Models;
 using PV260.Project.Domain.Options.ArkFundsApi;
 using PV260.Project.Infrastructure.ArkFunds.Mappers;

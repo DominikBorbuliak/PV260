@@ -1,8 +1,8 @@
 ﻿using MimeKit.Text;
 using PV260.Project.Domain;
-using PV260.Project.Domain.Interfaces.Infrastructure.ArkFunds;
-using PV260.Project.Domain.Interfaces.Infrastructure.Email;
-using PV260.Project.Domain.Interfaces.Infrastructure.Persistence;
+using PV260.Project.Domain.Interfaces.ArkFunds;
+using PV260.Project.Domain.Interfaces.Email;
+using PV260.Project.Domain.Interfaces.Persistence;
 using PV260.Project.Domain.Models;
 using System.Text;
 

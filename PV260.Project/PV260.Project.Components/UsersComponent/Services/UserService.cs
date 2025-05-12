@@ -1,4 +1,4 @@
-﻿using PV260.Project.Domain.Interfaces.Infrastructure.Persistence;
+﻿using PV260.Project.Domain.Interfaces.Persistence;
 using PV260.Project.Domain.Models;
 
 namespace PV260.Project.Components.UsersComponent.Services;

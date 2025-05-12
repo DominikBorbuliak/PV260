@@ -3,7 +3,7 @@ using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using PV260.Project.Domain.Exceptions;
-using PV260.Project.Domain.Interfaces.Infrastructure.Email;
+using PV260.Project.Domain.Interfaces.Email;
 using PV260.Project.Domain.Models;
 using PV260.Project.Domain.Options.SMTP;
 
