@@ -4,6 +4,8 @@ namespace PV260.Project.Components.UsersComponent;
 
 public interface IUserComponent
 {
+    Task SignOutAsync();
+
     Task<User> GetUserByEmailAsync(string email);
 
     Task ToggleIsSubscribedAsync(string email);

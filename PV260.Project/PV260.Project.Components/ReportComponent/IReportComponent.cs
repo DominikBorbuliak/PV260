@@ -1,8 +1,8 @@
 using PV260.Project.Domain.Models;
 
-namespace PV260.Project.Components.ReportsComponent;
+namespace PV260.Project.Components.ReportComponent;
 
-public interface IReportsComponent
+public interface IReportComponent
 {
     Task GenerateAndNotifyAsync();
 

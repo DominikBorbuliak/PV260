@@ -1,13 +1,13 @@
 using PV260.Project.Components.ReportsComponent.Services;
 using PV260.Project.Domain.Models;
 
-namespace PV260.Project.Components.ReportsComponent;
+namespace PV260.Project.Components.ReportComponent;
 
-public class ReportsComponent : IReportsComponent
+public class ReportComponent : IReportComponent
 {
     private readonly IReportService _reportService;
 
-    public ReportsComponent(IReportService reportService)
+    public ReportComponent(IReportService reportService)
     {
         _reportService = reportService;
     }

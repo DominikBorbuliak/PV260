@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using PV260.Project.Components.ReportsComponent;
+using PV260.Project.Components.ReportComponent;
 using PV260.Project.Components.ReportsComponent.Jobs;
 using PV260.Project.Components.ReportsComponent.Services;
 using PV260.Project.Components.UsersComponent;
@@ -99,10 +99,11 @@ public static class WebApplicationBuilderExtensions
         _ = builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         _ = builder.Services.AddScoped<IUserService, UserService>();
-        _ = builder.Services.AddScoped<IUserComponent, UserComponent>();
         _ = builder.Services.AddScoped<IEmailSender, EmailSender>();
         _ = builder.Services.AddScoped<IReportService, ReportService>();
-        _ = builder.Services.AddScoped<IReportsComponent, ReportsComponent>();
+
+        _ = builder.Services.AddScoped<IUserComponent, UserComponent>();
+        _ = builder.Services.AddScoped<IReportComponent, ReportComponent>();
 
         return builder;
     }
