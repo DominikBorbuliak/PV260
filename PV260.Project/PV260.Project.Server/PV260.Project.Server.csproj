@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\PV260.Project.Components\PV260.Project.Components.csproj" />
         <ProjectReference Include="..\PV260.Project.Domain\PV260.Project.Domain.csproj" />
         <ProjectReference Include="..\pv260.project.client\pv260.project.client.esproj">
             <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

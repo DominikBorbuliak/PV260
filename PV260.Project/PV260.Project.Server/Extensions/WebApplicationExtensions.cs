@@ -37,9 +37,13 @@ public static class WebApplicationExtensions
     public static WebApplication ApplyMigrations(this WebApplication app)
     {
         using IServiceScope scope = app.Services.CreateScope();
+
         IDbContextFactory<AppDbContext> factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
+
         using AppDbContext db = factory.CreateDbContext();
+
         db.Database.Migrate();
+
         return app;
     }
 

@@ -1,19 +1,21 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using PV260.Project.Components.ReportComponent;
+using PV260.Project.Components.ReportsComponent.Jobs;
+using PV260.Project.Components.ReportsComponent.Services;
+using PV260.Project.Components.UsersComponent;
+using PV260.Project.Components.UsersComponent.Services;
 using PV260.Project.Domain.Exceptions;
-using PV260.Project.Domain.Interfaces.Domain;
-using PV260.Project.Domain.Interfaces.Infrastructure.ArkFunds;
-using PV260.Project.Domain.Interfaces.Infrastructure.Email;
-using PV260.Project.Domain.Interfaces.Infrastructure.Persistence;
+using PV260.Project.Domain.Interfaces.ArkFunds;
+using PV260.Project.Domain.Interfaces.Email;
+using PV260.Project.Domain.Interfaces.Persistence;
 using PV260.Project.Domain.Options.ArkFundsApi;
 using PV260.Project.Domain.Options.SMTP;
-using PV260.Project.Domain.Services;
 using PV260.Project.Infrastructure.ArkFunds.Repositories;
 using PV260.Project.Infrastructure.Email;
 using PV260.Project.Infrastructure.Persistence;
 using PV260.Project.Infrastructure.Persistence.Models;
 using PV260.Project.Infrastructure.Persistence.Repositories;
-using PV260.Project.Server.Jobs;
 using Quartz;
 using Quartz.AspNetCore;
 
@@ -99,6 +101,9 @@ public static class WebApplicationBuilderExtensions
         _ = builder.Services.AddScoped<IUserService, UserService>();
         _ = builder.Services.AddScoped<IEmailSender, EmailSender>();
         _ = builder.Services.AddScoped<IReportService, ReportService>();
+
+        _ = builder.Services.AddScoped<IUserComponent, UserComponent>();
+        _ = builder.Services.AddScoped<IReportComponent, ReportComponent>();
 
         return builder;
     }

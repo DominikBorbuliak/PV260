@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using PV260.Project.Domain.Interfaces.Infrastructure.Persistence;
+using PV260.Project.Domain.Interfaces.Persistence;
 
 namespace PV260.Project.Infrastructure.Persistence;
 
