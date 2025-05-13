@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PV260.Project.Domain.Interfaces.Infrastructure.Persistence;
+using PV260.Project.Domain.Interfaces.Persistence;
 using PV260.Project.Domain.Models;
 using PV260.Project.Infrastructure.Persistence.Mappers;
 using PV260.Project.Infrastructure.Persistence.Models;

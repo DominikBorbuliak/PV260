@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PV260.Project.Infrastructur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PV260.Project.Domain", "PV260.Project.Domain\PV260.Project.Domain.csproj", "{0426BBCD-B9DB-4124-9F85-B679819C4B59}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PV260.Project.Components", "PV260.Project.Components\PV260.Project.Components.csproj", "{DECB814B-FB9B-4F17-9E0C-5A506DAF4A4E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{0426BBCD-B9DB-4124-9F85-B679819C4B59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0426BBCD-B9DB-4124-9F85-B679819C4B59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0426BBCD-B9DB-4124-9F85-B679819C4B59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DECB814B-FB9B-4F17-9E0C-5A506DAF4A4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DECB814B-FB9B-4F17-9E0C-5A506DAF4A4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DECB814B-FB9B-4F17-9E0C-5A506DAF4A4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DECB814B-FB9B-4F17-9E0C-5A506DAF4A4E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -12,12 +12,13 @@ try
         .ConfigureQuartzJobs()
         .Build();
 
-    _ = app.ApplyMigrations()
+    app
+        .ApplyMigrations()
         .SeedRoles()
         .SeedAdminUser()
-        .SeedUser();
-
-    app.ConfigureApplication().Run();
+        .SeedUser()
+        .ConfigureApplication()
+        .Run();
 }
 catch (Exception exception)
 {
