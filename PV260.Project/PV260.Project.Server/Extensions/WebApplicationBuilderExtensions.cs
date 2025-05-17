@@ -18,6 +18,7 @@ using PV260.Project.Infrastructure.Persistence.Models;
 using PV260.Project.Infrastructure.Persistence.Repositories;
 using Quartz;
 using Quartz.AspNetCore;
+using Serilog;
 
 namespace PV260.Project.Server.Extensions;
 
@@ -32,7 +33,6 @@ public static class WebApplicationBuilderExtensions
         {
             _ = options
                 .UseSqlite(sqliteConnectionString)
-                .LogTo(a => Console.WriteLine(a), LogLevel.Debug)
                 .EnableSensitiveDataLogging(true)
                 .EnableDetailedErrors()
                 .UseLazyLoadingProxies();
@@ -151,6 +151,23 @@ public static class WebApplicationBuilderExtensions
         });
 
         _ = builder.Services.AddQuartzServer(opt => opt.WaitForJobsToComplete = true);
+
+        return builder;
+    }
+
+    public static WebApplicationBuilder ConfigureLogger(this WebApplicationBuilder builder)
+    {
+        Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.File("logs/Log.txt", rollingInterval: RollingInterval.Day)
+                .WriteTo.Console()
+                .CreateLogger();
+
+        _ = builder.Host.UseSerilog();
+
+        _ = builder.Logging.ClearProviders();
+        _ = builder.Logging.AddConsole();
+        _ = builder.Logging.AddDebug();
 
         return builder;
     }
