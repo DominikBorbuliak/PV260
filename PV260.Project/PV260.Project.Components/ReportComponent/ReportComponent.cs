@@ -1,4 +1,4 @@
-using PV260.Project.Components.ReportsComponent.Services;
+using PV260.Project.Components.ReportComponent.Services;
 using PV260.Project.Domain.Models;
 
 namespace PV260.Project.Components.ReportComponent;
