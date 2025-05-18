@@ -73,7 +73,7 @@ public class ReportService : IReportService
         return report?.Diff ?? [];
     }
 
-    private static ReportDiff CreateReportDiff(IList<ArkFundsHolding> oldReport, IList<ArkFundsHolding> newReport)
+    public static ReportDiff CreateReportDiff(IList<ArkFundsHolding> oldReport, IList<ArkFundsHolding> newReport)
     {
         var diff = new ReportDiff();
 
