@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PV260.Project.Components.ReportComponent;
-using PV260.Project.Components.ReportsComponent.Jobs;
-using PV260.Project.Components.ReportsComponent.Services;
+using PV260.Project.Components.ReportComponent.Jobs;
+using PV260.Project.Components.ReportComponent.Services;
 using PV260.Project.Components.UsersComponent;
 using PV260.Project.Components.UsersComponent.Services;
 using PV260.Project.Domain.Exceptions;
