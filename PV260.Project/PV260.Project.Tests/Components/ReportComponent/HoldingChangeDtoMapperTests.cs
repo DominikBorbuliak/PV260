@@ -1,4 +1,4 @@
-﻿using PV260.Project.Components.ReportsComponent.Mappers;
+﻿using PV260.Project.Components.ReportComponent.Mappers;
 using PV260.Project.Domain.Models;
 using PV260.Project.Tests.Builders;
 
