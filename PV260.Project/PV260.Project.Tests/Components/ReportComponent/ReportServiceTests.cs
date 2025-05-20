@@ -10,129 +10,85 @@ namespace PV260.Project.Tests.Components.ReportComponent;
 
 public class ReportServiceTests
 {
-    private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
-    private readonly Mock<IArkFundsApiRepository> _apiRepoMock = new();
-    private readonly Mock<IEmailSender> _emailSenderMock = new();
-
-    private ReportService CreateService() => new(_unitOfWorkMock.Object, _apiRepoMock.Object, _emailSenderMock.Object);
-
     [Fact]
     public async Task GenerateAndNotifyAsync_ShouldSendEmail_WhenThereAreChanges()
     {
-        var oldHolding = new ArkFundsHoldingBuilder().WithShares(50).Build();
-        var newHolding = new ArkFundsHoldingBuilder().WithShares(100).Build();
-        var report = new ReportBuilder().WithHoldings(oldHolding).Build();
+        var scenario = await new When()
+            .WithOldHolding(new ArkFundsHoldingBuilder().WithShares(50).Build())
+            .WithNewHolding(new ArkFundsHoldingBuilder().WithShares(100).Build())
+            .WithSubscribedEmails("user@example.com")
+            .RunGenerateAndNotify();
 
-        _unitOfWorkMock.Setup(u => u.BeginTransactionAsync()).Returns(Task.CompletedTask);
-        _unitOfWorkMock.Setup(u => u.ReportRepository.GetLatestReportAsync()).ReturnsAsync(report);
-        _unitOfWorkMock.Setup(u => u.ReportRepository.SaveReportAsync(It.IsAny<IList<ArkFundsHolding>>(), It.IsAny<ReportDiff>())).Returns(Task.CompletedTask);
-        _unitOfWorkMock.Setup(u => u.UserRepository.GetSubscribedUserEmailsAsync()).ReturnsAsync(new List<string> { "user@example.com" });
-        _unitOfWorkMock.Setup(u => u.CommitTransactionAsync()).Returns(Task.CompletedTask);
-        _apiRepoMock.Setup(a => a.GetCurrentHoldingsAsync()).ReturnsAsync(new List<ArkFundsHolding> { newHolding });
-
-        var service = CreateService();
-
-        await service.GenerateAndNotifyAsync();
-
-        _emailSenderMock.Verify(e => e.SendAsync(It.IsAny<EmailConfiguration>()), Times.Once);
+        scenario.ThenEmailShouldBeSent();
     }
 
     [Fact]
     public async Task GenerateAndNotifyAsync_ShouldNotSendEmail_WhenNoSubscribedUsers()
     {
-        _unitOfWorkMock.Setup(u => u.BeginTransactionAsync()).Returns(Task.CompletedTask);
-        _unitOfWorkMock.Setup(u => u.ReportRepository.GetLatestReportAsync()).ReturnsAsync((Report)null);
-        _unitOfWorkMock.Setup(u => u.ReportRepository.SaveReportAsync(It.IsAny<IList<ArkFundsHolding>>(), It.IsAny<ReportDiff>())).Returns(Task.CompletedTask);
-        _unitOfWorkMock.Setup(u => u.UserRepository.GetSubscribedUserEmailsAsync()).ReturnsAsync(new List<string>());
-        _unitOfWorkMock.Setup(u => u.CommitTransactionAsync()).Returns(Task.CompletedTask);
-        _apiRepoMock.Setup(a => a.GetCurrentHoldingsAsync()).ReturnsAsync(new List<ArkFundsHolding>());
+        var scenario = await new When()
+            .WithNewHolding()
+            .WithSubscribedEmails()
+            .RunGenerateAndNotify();
 
-        var service = CreateService();
-
-        await service.GenerateAndNotifyAsync();
-
-        _emailSenderMock.Verify(e => e.SendAsync(It.IsAny<EmailConfiguration>()), Times.Never);
+        scenario.ThenEmailShouldNotBeSent();
     }
 
     [Fact]
     public async Task GenerateAndNotifyAsync_ShouldRollbackTransaction_OnException()
     {
-        _unitOfWorkMock.Setup(u => u.BeginTransactionAsync()).Returns(Task.CompletedTask);
-        _unitOfWorkMock.Setup(u => u.ReportRepository.GetLatestReportAsync()).ThrowsAsync(new Exception("Test failure"));
-        _unitOfWorkMock.Setup(u => u.RollbackTransactionAsync()).Returns(Task.CompletedTask);
+        var scenario = await new When()
+            .WithFailingReportRepository()
+            .RunGenerateAndNotifyExpectingException();
 
-        var service = CreateService();
-
-        await Assert.ThrowsAsync<Exception>(() => service.GenerateAndNotifyAsync());
-
-        _unitOfWorkMock.Verify(u => u.RollbackTransactionAsync(), Times.Once);
+        scenario.ThenTransactionShouldBeRolledBack();
     }
 
     [Fact]
     public async Task GenerateAndNotifyAsync_ShouldDetectAddedHolding()
     {
-        var report = new ReportBuilder().WithHoldings().Build();
-        var newHolding = new ArkFundsHoldingBuilder().WithTicker("NEW").Build();
+        var scenario = await new When()
+            .WithNewHolding(new ArkFundsHoldingBuilder().WithTicker("NEW").Build())
+            .WithSubscribedEmails("user@example.com")
+            .RunGenerateAndNotify();
 
-        _unitOfWorkMock.Setup(u => u.BeginTransactionAsync()).Returns(Task.CompletedTask);
-        _unitOfWorkMock.Setup(u => u.ReportRepository.GetLatestReportAsync()).ReturnsAsync(report);
-        _unitOfWorkMock.Setup(u => u.ReportRepository.SaveReportAsync(It.IsAny<IList<ArkFundsHolding>>(), It.Is<ReportDiff>(d => d.Changes.Any(c => c.ChangeType == ChangeType.Added)))).Returns(Task.CompletedTask);
-        _unitOfWorkMock.Setup(u => u.UserRepository.GetSubscribedUserEmailsAsync()).ReturnsAsync(new List<string> { "user@example.com" });
-        _unitOfWorkMock.Setup(u => u.CommitTransactionAsync()).Returns(Task.CompletedTask);
-        _apiRepoMock.Setup(a => a.GetCurrentHoldingsAsync()).ReturnsAsync(new List<ArkFundsHolding> { newHolding });
-
-        var service = CreateService();
-
-        await service.GenerateAndNotifyAsync();
+        scenario.ThenChangeOfType(ChangeType.Added);
     }
 
     [Fact]
     public async Task GenerateAndNotifyAsync_ShouldDetectRemovedHolding()
     {
-        var oldHolding = new ArkFundsHoldingBuilder().WithTicker("REMOVE").Build();
-        var report = new ReportBuilder().WithHoldings(oldHolding).Build();
+        var scenario = await new When()
+            .WithOldHolding(new ArkFundsHoldingBuilder().WithTicker("REMOVE").Build())
+            .WithSubscribedEmails("user@example.com")
+            .RunGenerateAndNotify();
 
-        _unitOfWorkMock.Setup(u => u.BeginTransactionAsync()).Returns(Task.CompletedTask);
-        _unitOfWorkMock.Setup(u => u.ReportRepository.GetLatestReportAsync()).ReturnsAsync(report);
-        _unitOfWorkMock.Setup(u => u.ReportRepository.SaveReportAsync(It.IsAny<IList<ArkFundsHolding>>(), It.Is<ReportDiff>(d => d.Changes.Any(c => c.ChangeType == ChangeType.Removed)))).Returns(Task.CompletedTask);
-        _unitOfWorkMock.Setup(u => u.UserRepository.GetSubscribedUserEmailsAsync()).ReturnsAsync(new List<string> { "user@example.com" });
-        _unitOfWorkMock.Setup(u => u.CommitTransactionAsync()).Returns(Task.CompletedTask);
-        _apiRepoMock.Setup(a => a.GetCurrentHoldingsAsync()).ReturnsAsync(new List<ArkFundsHolding>());
-
-        var service = CreateService();
-
-        await service.GenerateAndNotifyAsync();
+        scenario.ThenChangeOfType(ChangeType.Removed);
     }
 
     [Fact]
     public async Task GenerateAndNotifyAsync_ShouldDetectNoChanges()
     {
         var holding = new ArkFundsHoldingBuilder().Build();
-        var report = new ReportBuilder().WithHoldings(holding).Build();
 
-        _unitOfWorkMock.Setup(u => u.BeginTransactionAsync()).Returns(Task.CompletedTask);
-        _unitOfWorkMock.Setup(u => u.ReportRepository.GetLatestReportAsync()).ReturnsAsync(report);
-        _unitOfWorkMock.Setup(u => u.ReportRepository.SaveReportAsync(It.IsAny<IList<ArkFundsHolding>>(), It.Is<ReportDiff>(d => !d.Changes.Any()))).Returns(Task.CompletedTask);
-        _unitOfWorkMock.Setup(u => u.UserRepository.GetSubscribedUserEmailsAsync()).ReturnsAsync(new List<string> { "user@example.com" });
-        _unitOfWorkMock.Setup(u => u.CommitTransactionAsync()).Returns(Task.CompletedTask);
-        _apiRepoMock.Setup(a => a.GetCurrentHoldingsAsync()).ReturnsAsync(new List<ArkFundsHolding> { holding });
+        var scenario = await new When()
+            .WithOldHolding(holding)
+            .WithNewHolding(holding)
+            .WithSubscribedEmails("user@example.com")
+            .RunGenerateAndNotify();
 
-        var service = CreateService();
-
-        await service.GenerateAndNotifyAsync();
+        scenario.ThenNoChanges();
     }
 
     [Fact]
     public async Task GetClosestPreviousReportDiffAsync_ShouldReturnLatest_WhenNoDateGiven()
     {
         var changes = new[] { new HoldingChangeBuilder().Build() };
-        var report = new ReportBuilder().WithDiff(changes).Build();
-        _unitOfWorkMock.Setup(u => u.ReportRepository.GetLatestReportAsync()).ReturnsAsync(report);
 
-        var service = CreateService();
-        var result = await service.GetClosestPreviousReportDiffAsync(null);
+        var scenario = await new When()
+            .WithReportDiff(changes)
+            .RunGetClosestPreviousReportDiff(null);
 
-        Assert.Equal(changes, result);
+        scenario.ThenDiffShouldMatch(changes);
     }
 
     [Fact]
@@ -140,45 +96,36 @@ public class ReportServiceTests
     {
         var date = DateTime.UtcNow;
         var changes = new[] { new HoldingChangeBuilder().Build() };
-        var report = new ReportBuilder().WithDiff(changes).Build();
-        _unitOfWorkMock.Setup(u => u.ReportRepository.GetClosestPreviousReportAsync(date)).ReturnsAsync(report);
 
-        var service = CreateService();
-        var result = await service.GetClosestPreviousReportDiffAsync(date);
+        var scenario = await new When()
+            .WithReportDiffFromDate(date, changes)
+            .RunGetClosestPreviousReportDiff(date);
 
-        Assert.Equal(changes, result);
+        scenario.ThenDiffShouldMatch(changes);
     }
 
     [Fact]
     public async Task GetClosestPreviousReportDiffAsync_ShouldReturnEmpty_WhenNull()
     {
-        _unitOfWorkMock.Setup(u => u.ReportRepository.GetLatestReportAsync()).ReturnsAsync((Report)null);
+        var scenario = await new When()
+            .WithNullReport()
+            .RunGetClosestPreviousReportDiff(null);
 
-        var service = CreateService();
-        var result = await service.GetClosestPreviousReportDiffAsync(null);
-
-        Assert.Empty(result);
+        scenario.ThenDiffShouldBeEmpty();
     }
 
     [Fact]
     public void CreateReportDiff_ShouldIgnoreHoldingsWithNullOrWhitespaceTickers()
     {
-        var oldReport = new List<ArkFundsHolding>
-        {
-            new ArkFundsHoldingBuilder().WithTicker(null!).Build(),
-            new ArkFundsHoldingBuilder().WithTicker("  ").Build()
-        };
-
-        var newReport = new List<ArkFundsHolding>
-        {
-            new ArkFundsHoldingBuilder().WithTicker("").Build(),
-            new ArkFundsHoldingBuilder().WithTicker("VALID").WithShares(10).Build()
-        };
-
-        var result = ReportService.CreateReportDiff(oldReport, newReport);
-
-        Assert.Single(result.Changes);
-        Assert.Equal("VALID", result.Changes[0].Ticker);
+        new When()
+            .WithOldHolding(
+                new ArkFundsHoldingBuilder().WithTicker(null!).Build(),
+                new ArkFundsHoldingBuilder().WithTicker("  ").Build())
+            .WithNewHolding(
+                new ArkFundsHoldingBuilder().WithTicker("").Build(),
+                new ArkFundsHoldingBuilder().WithTicker("VALID").WithShares(10).Build())
+            .RunCreateDiff()
+            .ThenChangesShouldHaveTickers("VALID");
     }
 
     [Fact]
@@ -187,72 +134,250 @@ public class ReportServiceTests
         var old = new ArkFundsHoldingBuilder().WithTicker("MOD").WithShares(100).WithWeight(15m).Build();
         var updated = new ArkFundsHoldingBuilder().WithTicker("MOD").WithShares(150).WithWeight(20m).Build();
 
-        var result = ReportService.CreateReportDiff(new List<ArkFundsHolding> { old }, new List<ArkFundsHolding> { updated });
-
-        var change = result.Changes[0];
-        Assert.Equal(100, change.OldShares);
-        Assert.Equal(150, change.NewShares);
-        Assert.Equal(15m, change.OldWeight);
-        Assert.Equal(20m, change.NewWeight);
+        new When()
+            .WithOldHolding(old)
+            .WithNewHolding(updated)
+            .RunCreateDiff()
+            .ThenShouldContainChange("MOD", ChangeType.Modified, 100, 150, 15m, 20m);
     }
 
     [Fact]
     public void CreateReportDiff_ShouldHandleEmptyInputs()
     {
-        var result = ReportService.CreateReportDiff(new List<ArkFundsHolding>(), new List<ArkFundsHolding>());
-        Assert.Empty(result.Changes);
+        new When()
+            .WithOldHolding()
+            .WithNewHolding()
+            .RunCreateDiff()
+            .ThenShouldHaveNoChanges();
     }
 
     [Fact]
     public void CreateReportDiff_ShouldIgnoreHoldingsWithEmptyOrNullTickers()
     {
-        var oldReport = new List<ArkFundsHolding>
-        {
-            new ArkFundsHoldingBuilder().WithTicker(null!).Build(),
-            new ArkFundsHoldingBuilder().WithTicker(" ").Build()
-        };
-
-        var newReport = new List<ArkFundsHolding>
-        {
-            new ArkFundsHoldingBuilder().WithTicker("").Build(),
-            new ArkFundsHoldingBuilder().WithTicker("VALID").WithShares(10).Build()
-        };
-
-        var result = ReportService.CreateReportDiff(oldReport, newReport);
-
-        Assert.Single(result.Changes);
-        Assert.Equal("VALID", result.Changes[0].Ticker);
+        new When()
+            .WithOldHolding(
+                new ArkFundsHoldingBuilder().WithTicker(null!).Build(),
+                new ArkFundsHoldingBuilder().WithTicker(" ").Build())
+            .WithNewHolding(
+                new ArkFundsHoldingBuilder().WithTicker("").Build(),
+                new ArkFundsHoldingBuilder().WithTicker("VALID").WithShares(10).Build())
+            .RunCreateDiff()
+            .ThenChangesShouldHaveTickers("VALID");
     }
 
     [Fact]
     public void CreateReportDiff_ShouldSetCorrectOldAndNewValues_WhenModified()
     {
-        var old = new ArkFundsHoldingBuilder()
-            .WithTicker("MOD")
-            .WithShares(100)
-            .WithWeight(15.5m)
-            .Build();
+        var old = new ArkFundsHoldingBuilder().WithTicker("MOD").WithShares(100).WithWeight(15.5m).Build();
+        var updated = new ArkFundsHoldingBuilder().WithTicker("MOD").WithShares(200).WithWeight(20m).Build();
 
-        var updated = new ArkFundsHoldingBuilder()
-            .WithTicker("MOD")
-            .WithShares(200)
-            .WithWeight(20m)
-            .Build();
-
-        var result = ReportService.CreateReportDiff(new List<ArkFundsHolding> { old }, new List<ArkFundsHolding> { updated });
-
-        var change = result.Changes.Single();
-        Assert.Equal(ChangeType.Modified, change.ChangeType);
-        Assert.Equal(100, change.OldShares);
-        Assert.Equal(200, change.NewShares);
-        Assert.Equal(15.5m, change.OldWeight);
-        Assert.Equal(20m, change.NewWeight);
+        new When()
+            .WithOldHolding(old)
+            .WithNewHolding(updated)
+            .RunCreateDiff()
+            .ThenShouldContainChange("MOD", ChangeType.Modified, 100, 200, 15.5m, 20m);
     }
 
     [Fact]
     public void CreateReportDiff_ShouldHandleCompletelyEmptyReports()
     {
-        var result = ReportService.CreateReportDiff([], []);
-        Assert.Empty(result.Changes);
+        new When()
+            .WithOldHolding()
+            .WithNewHolding()
+            .RunCreateDiff()
+            .ThenShouldHaveNoChanges();
+    }
+
+    private sealed class When
+    {
+        private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
+        private readonly Mock<IArkFundsApiRepository> _apiRepoMock = new();
+        private readonly Mock<IEmailSender> _emailSenderMock = new();
+        private IList<ArkFundsHolding> _oldHoldings = new List<ArkFundsHolding>();
+        private IList<ArkFundsHolding> _newHoldings = new List<ArkFundsHolding>();
+        private IList<string> _emails = new List<string>();
+        private Report _report;
+        private ReportService _service;
+        private Exception _thrownException;
+        private IList<HoldingChange> _resultDiff;
+        private DateTime? _date;
+        private bool _shouldThrowOnReport;
+        private ReportDiff _diff;
+
+        public When WithOldHolding(params ArkFundsHolding[] holdings)
+        {
+            _oldHoldings = holdings.ToList();
+            _report = new ReportBuilder().WithHoldings(_oldHoldings.ToArray()).Build();
+            return this;
+        }
+
+        public When WithNewHolding(params ArkFundsHolding[] holdings)
+        {
+            _newHoldings = holdings.Any() ? holdings.ToList() : new List<ArkFundsHolding>();
+            return this;
+        }
+
+        public When WithSubscribedEmails(params string[] emails)
+        {
+            _emails = emails;
+            return this;
+        }
+
+        public When WithFailingReportRepository()
+        {
+            _shouldThrowOnReport = true;
+            return this;
+        }
+
+        public When WithReportDiff(HoldingChange[] changes)
+        {
+            _report = new ReportBuilder().WithDiff(changes).Build();
+
+            _unitOfWorkMock.Setup(u => u.ReportRepository.GetLatestReportAsync())
+                .ReturnsAsync(_report);
+
+            return this;
+        }
+
+        public When WithReportDiffFromDate(DateTime date, HoldingChange[] changes)
+        {
+            _date = date;
+            _unitOfWorkMock.Setup(u => u.ReportRepository.GetClosestPreviousReportAsync(date)).ReturnsAsync(
+                new ReportBuilder().WithDiff(changes).Build());
+            return this;
+        }
+
+        public When WithNullReport()
+        {
+            _unitOfWorkMock.Setup(u => u.ReportRepository.GetLatestReportAsync())
+                .ReturnsAsync((Report)null!);
+            return this;
+        }
+
+        public async Task<When> RunGenerateAndNotify()
+        {
+            SetupMocks();
+            _service = new ReportService(_unitOfWorkMock.Object, _apiRepoMock.Object, _emailSenderMock.Object);
+            await _service.GenerateAndNotifyAsync();
+            return this;
+        }
+
+        public async Task<When> RunGenerateAndNotifyExpectingException()
+        {
+            SetupMocks();
+            _service = new ReportService(_unitOfWorkMock.Object, _apiRepoMock.Object, _emailSenderMock.Object);
+            try
+            {
+                await _service.GenerateAndNotifyAsync();
+            }
+            catch (Exception ex)
+            {
+                _thrownException = ex;
+            }
+            return this;
+        }
+
+        public async Task<When> RunGetClosestPreviousReportDiff(DateTime? date)
+        {
+            _service = new ReportService(_unitOfWorkMock.Object, _apiRepoMock.Object, _emailSenderMock.Object);
+            _resultDiff = (await _service.GetClosestPreviousReportDiffAsync(date)).ToList();
+            return this;
+        }
+
+        public When ThenEmailShouldBeSent()
+        {
+            _emailSenderMock.Verify(e => e.SendAsync(It.IsAny<EmailConfiguration>()), Times.Once);
+            return this;
+        }
+
+        public When ThenEmailShouldNotBeSent()
+        {
+            _emailSenderMock.Verify(e => e.SendAsync(It.IsAny<EmailConfiguration>()), Times.Never);
+            return this;
+        }
+
+        public When ThenTransactionShouldBeRolledBack()
+        {
+            Assert.NotNull(_thrownException);
+            _unitOfWorkMock.Verify(u => u.RollbackTransactionAsync(), Times.Once);
+            return this;
+        }
+
+        public When ThenChangeOfType(ChangeType changeType)
+        {
+            _unitOfWorkMock.Verify(u =>
+                u.ReportRepository.SaveReportAsync(It.IsAny<IList<ArkFundsHolding>>(),
+                It.Is<ReportDiff>(d => d.Changes.Any(c => c.ChangeType == changeType))), Times.Once);
+            return this;
+        }
+
+        public When ThenNoChanges()
+        {
+            _unitOfWorkMock.Verify(u =>
+                u.ReportRepository.SaveReportAsync(It.IsAny<IList<ArkFundsHolding>>(),
+                It.Is<ReportDiff>(d => !d.Changes.Any())), Times.Once);
+            return this;
+        }
+
+        public When ThenDiffShouldMatch(IEnumerable<HoldingChange> expected)
+        {
+            Assert.Equal(expected, _resultDiff);
+            return this;
+        }
+
+        public When ThenDiffShouldBeEmpty()
+        {
+            Assert.Empty(_resultDiff);
+            return this;
+        }
+
+        public When ThenShouldHaveNoChanges()
+        {
+            Assert.Empty(_diff.Changes);
+            return this;
+        }
+
+        public When ThenChangesShouldHaveTickers(params string[] expectedTickers)
+        {
+            var actualTickers = _diff.Changes.Select(c => c.Ticker).ToList();
+            Assert.Equal(expectedTickers, actualTickers);
+            return this;
+        }
+
+        public When ThenShouldContainChange(string ticker, ChangeType type, int oldShares, int newShares, decimal oldWeight, decimal newWeight)
+        {
+            var change = _diff.Changes.Single(c => c.Ticker == ticker);
+            Assert.Equal(type, change.ChangeType);
+            Assert.Equal(oldShares, change.OldShares);
+            Assert.Equal(newShares, change.NewShares);
+            Assert.Equal(oldWeight, change.OldWeight);
+            Assert.Equal(newWeight, change.NewWeight);
+            return this;
+        }
+        public When RunCreateDiff()
+        {
+            _diff = ReportService.CreateReportDiff(_oldHoldings, _newHoldings);
+            return this;
+        }
+
+        private void SetupMocks()
+        {
+            _unitOfWorkMock.Setup(u => u.BeginTransactionAsync()).Returns(Task.CompletedTask);
+            _unitOfWorkMock.Setup(u => u.CommitTransactionAsync()).Returns(Task.CompletedTask);
+            _unitOfWorkMock.Setup(u => u.RollbackTransactionAsync()).Returns(Task.CompletedTask);
+            _unitOfWorkMock.Setup(u => u.UserRepository.GetSubscribedUserEmailsAsync()).ReturnsAsync(_emails);
+            _unitOfWorkMock.Setup(u => u.ReportRepository.SaveReportAsync(It.IsAny<IList<ArkFundsHolding>>(), It.IsAny<ReportDiff>())).Returns(Task.CompletedTask);
+
+            if (_shouldThrowOnReport)
+            {
+                _unitOfWorkMock.Setup(u => u.ReportRepository.GetLatestReportAsync()).ThrowsAsync(new Exception("Test failure"));
+            }
+            else if (_date == null)
+            {
+                _unitOfWorkMock.Setup(u => u.ReportRepository.GetLatestReportAsync()).ReturnsAsync(_report);
+            }
+
+            _apiRepoMock.Setup(a => a.GetCurrentHoldingsAsync()).ReturnsAsync(_newHoldings);
+        }
     }
 }
