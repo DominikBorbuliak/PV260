@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PV260.Project.Components.Common.Controllers;
-using PV260.Project.Components.ReportsComponent.DTOs;
-using PV260.Project.Components.ReportsComponent.Mappers;
+using PV260.Project.Components.ReportComponent.DTOs;
+using PV260.Project.Components.ReportComponent.Mappers;
 using PV260.Project.Domain.Models;
 
 namespace PV260.Project.Components.ReportComponent.Controllers;

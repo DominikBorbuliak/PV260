@@ -10,6 +10,7 @@ try
         .ConfigureArkHttpClient()
         .ConfigureControllers()
         .ConfigureQuartzJobs()
+        .ConfigureLogger()
         .Build();
 
     app

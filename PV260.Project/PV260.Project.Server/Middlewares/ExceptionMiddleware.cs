@@ -1,5 +1,6 @@
 ﻿using PV260.Project.Domain;
 using PV260.Project.Domain.Exceptions;
+using Serilog;
 using System.Net;
 
 namespace PV260.Project.Server.Middlewares;
@@ -7,12 +8,10 @@ namespace PV260.Project.Server.Middlewares;
 public class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly ILogger<ExceptionMiddleware> _logger;
 
-    public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
+    public ExceptionMiddleware(RequestDelegate next)
     {
         _next = next;
-        _logger = logger;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -23,7 +22,7 @@ public class ExceptionMiddleware
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex.ToString());
+            Log.Error(ex.ToString());
             await HandleExceptionAsync(context, ex);
         }
     }
