@@ -6,76 +6,102 @@ using PV260.Project.Infrastructure.Email;
 using System.Reflection;
 
 namespace PV260.Project.Tests.Infrastructure.Email;
+
 public class EmailSenderTests
 {
-    private readonly SMTPOptions _validOptions = new()
+    [Fact]
+    public void HostMissing_ShouldThrowConfigurationException()
     {
-        Host = "smtp.example.com",
-        Port = 587,
-        Email = "sender@example.com",
-        Password = "password"
-    };
-
-    private EmailSender CreateSender(SMTPOptions? options = null)
-    {
-        var optionsMock = new Mock<IOptions<SMTPOptions>>();
-        optionsMock.Setup(o => o.Value).Returns(options ?? _validOptions);
-        return new EmailSender(optionsMock.Object);
+        _ = new When()
+            .WithSMTPOptions(host: null)
+            .CreateSender()
+            .InvokeEnsureSmtpConfigured()
+            .ThenThrows<ConfigurationException>("SMTP host not configured.");
     }
 
     [Fact]
-    public void EnsureSmtpConfigured_ThrowsIfHostMissing()
+    public void PortMissing_ShouldThrowConfigurationException()
     {
-        var options = new SMTPOptions { Host = null, Port = 587, Email = "email", Password = "pw" };
-        var sender = CreateSender(options);
-
-        var ex = Assert.Throws<TargetInvocationException>(() =>
-            sender.GetType().GetMethod("EnsureSmtpConfigured", BindingFlags.NonPublic | BindingFlags.Instance)!
-                  .Invoke(sender, null));
-
-        Assert.IsType<ConfigurationException>(ex.InnerException);
-        Assert.Equal("SMTP host not configured.", ex.InnerException!.Message);
+        _ = new When()
+            .WithSMTPOptions(port: 0)
+            .CreateSender()
+            .InvokeEnsureSmtpConfigured()
+            .ThenThrows<ConfigurationException>("SMTP port not configured.");
     }
 
     [Fact]
-    public void EnsureSmtpConfigured_ThrowsIfPortMissing()
+    public void EmailMissing_ShouldThrowConfigurationException()
     {
-        var options = new SMTPOptions { Host = "smtp", Port = 0, Email = "email", Password = "pw" };
-        var sender = CreateSender(options);
-
-        var ex = Assert.Throws<TargetInvocationException>(() =>
-            sender.GetType().GetMethod("EnsureSmtpConfigured", BindingFlags.NonPublic | BindingFlags.Instance)!
-                  .Invoke(sender, null));
-
-        Assert.IsType<ConfigurationException>(ex.InnerException);
-        Assert.Equal("SMTP port not configured.", ex.InnerException!.Message);
+        _ = new When()
+            .WithSMTPOptions(email: null)
+            .CreateSender()
+            .InvokeEnsureSmtpConfigured()
+            .ThenThrows<ConfigurationException>("SMTP username not configured.");
     }
 
     [Fact]
-    public void EnsureSmtpConfigured_ThrowsIfEmailMissing()
+    public void PasswordMissing_ShouldThrowConfigurationException()
     {
-        var options = new SMTPOptions { Host = "smtp", Port = 587, Email = null!, Password = "pw" };
-        var sender = CreateSender(options);
-
-        var ex = Assert.Throws<TargetInvocationException>(() =>
-            sender.GetType().GetMethod("EnsureSmtpConfigured", BindingFlags.NonPublic | BindingFlags.Instance)!
-                  .Invoke(sender, null));
-
-        Assert.IsType<ConfigurationException>(ex.InnerException);
-        Assert.Equal("SMTP username not configured.", ex.InnerException!.Message);
+        _ = new When()
+            .WithSMTPOptions(password: null)
+            .CreateSender()
+            .InvokeEnsureSmtpConfigured()
+            .ThenThrows<ConfigurationException>("SMTP password not configured.");
     }
 
-    [Fact]
-    public void EnsureSmtpConfigured_ThrowsIfPasswordMissing()
+    private sealed class When
     {
-        var options = new SMTPOptions { Host = "smtp", Port = 587, Email = "email", Password = null! };
-        var sender = CreateSender(options);
+        private SMTPOptions _smtpOptions = new()
+        {
+            Host = "smtp.example.com",
+            Port = 587,
+            Email = "sender@example.com",
+            Password = "password"
+        };
 
-        var ex = Assert.Throws<TargetInvocationException>(() =>
-            sender.GetType().GetMethod("EnsureSmtpConfigured", BindingFlags.NonPublic | BindingFlags.Instance)!
-                  .Invoke(sender, null));
+        private EmailSender _sender;
+        private Exception _caughtException;
 
-        Assert.IsType<ConfigurationException>(ex.InnerException);
-        Assert.Equal("SMTP password not configured.", ex.InnerException!.Message);
+        public When WithSMTPOptions(string? host = "smtp.example.com", int port = 587, string? email = "sender@example.com", string? password = "password")
+        {
+            _smtpOptions = new SMTPOptions
+            {
+                Host = host,
+                Port = port,
+                Email = email,
+                Password = password
+            };
+            return this;
+        }
+
+        public When CreateSender()
+        {
+            var optionsMock = new Mock<IOptions<SMTPOptions>>();
+            optionsMock.Setup(o => o.Value).Returns(_smtpOptions);
+            _sender = new EmailSender(optionsMock.Object);
+            return this;
+        }
+
+        public When InvokeEnsureSmtpConfigured()
+        {
+            try
+            {
+                var method = typeof(EmailSender).GetMethod("EnsureSmtpConfigured", BindingFlags.NonPublic | BindingFlags.Instance);
+                method!.Invoke(_sender, null);
+            }
+            catch (TargetInvocationException tie)
+            {
+                _caughtException = tie.InnerException!;
+            }
+            return this;
+        }
+
+        public When ThenThrows<TException>(string expectedMessage) where TException : Exception
+        {
+            Assert.NotNull(_caughtException);
+            Assert.IsType<TException>(_caughtException);
+            Assert.Equal(expectedMessage, _caughtException.Message);
+            return this;
+        }
     }
 }
