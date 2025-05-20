@@ -13,7 +13,7 @@ public class EmailSenderTests
     public void HostMissing_ShouldThrowConfigurationException()
     {
         _ = new When()
-            .WithSMTPOptions(host: null)
+            .WithSmtpOptions(host: null)
             .CreateSender()
             .InvokeEnsureSmtpConfigured()
             .ThenThrows<ConfigurationException>("SMTP host not configured.");
@@ -23,7 +23,7 @@ public class EmailSenderTests
     public void PortMissing_ShouldThrowConfigurationException()
     {
         _ = new When()
-            .WithSMTPOptions(port: 0)
+            .WithSmtpOptions(port: 0)
             .CreateSender()
             .InvokeEnsureSmtpConfigured()
             .ThenThrows<ConfigurationException>("SMTP port not configured.");
@@ -33,7 +33,7 @@ public class EmailSenderTests
     public void EmailMissing_ShouldThrowConfigurationException()
     {
         _ = new When()
-            .WithSMTPOptions(email: null)
+            .WithSmtpOptions(email: null)
             .CreateSender()
             .InvokeEnsureSmtpConfigured()
             .ThenThrows<ConfigurationException>("SMTP username not configured.");
@@ -43,7 +43,7 @@ public class EmailSenderTests
     public void PasswordMissing_ShouldThrowConfigurationException()
     {
         _ = new When()
-            .WithSMTPOptions(password: null)
+            .WithSmtpOptions(password: null)
             .CreateSender()
             .InvokeEnsureSmtpConfigured()
             .ThenThrows<ConfigurationException>("SMTP password not configured.");
@@ -59,11 +59,12 @@ public class EmailSenderTests
             Password = "password"
         };
 
-        private EmailSender _sender;
-        private Exception _caughtException;
+        private EmailSender? _sender;
+        private Exception? _caughtException;
 
-        public When WithSMTPOptions(string? host = "smtp.example.com", int port = 587, string? email = "sender@example.com", string? password = "password")
+        public When WithSmtpOptions(string? host = "smtp.example.com", int port = 587, string? email = "sender@example.com", string? password = "password")
         {
+#pragma warning disable CS8601 // Possible null reference assignment: Setup for tests with exception throwing
             _smtpOptions = new SMTPOptions
             {
                 Host = host,
@@ -71,6 +72,7 @@ public class EmailSenderTests
                 Email = email,
                 Password = password
             };
+#pragma warning restore CS8601 // Possible null reference assignment.
             return this;
         }
 

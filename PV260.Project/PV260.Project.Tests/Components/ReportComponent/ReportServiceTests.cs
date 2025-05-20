@@ -192,13 +192,13 @@ public class ReportServiceTests
         private IList<ArkFundsHolding> _oldHoldings = new List<ArkFundsHolding>();
         private IList<ArkFundsHolding> _newHoldings = new List<ArkFundsHolding>();
         private IList<string> _emails = new List<string>();
-        private Report _report;
-        private ReportService _service;
-        private Exception _thrownException;
-        private IList<HoldingChange> _resultDiff;
+        private Report? _report;
+        private ReportService? _service;
+        private Exception? _thrownException;
+        private IList<HoldingChange> _resultDiff = [];
         private DateTime? _date;
         private bool _shouldThrowOnReport;
-        private ReportDiff _diff;
+        private ReportDiff _diff = new ReportDiff();
 
         public When WithOldHolding(params ArkFundsHolding[] holdings)
         {

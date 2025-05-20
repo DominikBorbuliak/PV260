@@ -44,10 +44,10 @@ public class HoldingChangeDtoMapperTests
 
     private sealed class When
     {
-        private HoldingChange _change;
-        private IList<HoldingChange> _list;
-        private HoldingChangeDto _dto;
-        private IList<HoldingChangeDto> _dtoList;
+        private HoldingChange _change = new HoldingChange();
+        private IList<HoldingChange> _list = [];
+        private HoldingChangeDto? _dto;
+        private IList<HoldingChangeDto> _dtoList = [];
 
         public When WithHoldingChange(ChangeType type, int oldShares, int newShares)
         {
@@ -100,8 +100,8 @@ public class HoldingChangeDtoMapperTests
 
         public When ShouldMatchOriginal()
         {
-            Assert.Equal(_change.Ticker, _dto.Ticker);
-            Assert.Equal(_change.Company, _dto.Company);
+            Assert.Equal(_change.Ticker, _dto!.Ticker);
+            Assert.Equal(_change.Company, _dto!.Company);
             Assert.Equal(_change.ChangeType.ToString(), _dto.ChangeType);
             Assert.Equal(_change.OldShares, _dto.OldShares);
             Assert.Equal(_change.NewShares, _dto.NewShares);
@@ -126,7 +126,7 @@ public class HoldingChangeDtoMapperTests
 
         public When ShouldHandleNulls()
         {
-            Assert.Null(_dto.Ticker);
+            Assert.Null(_dto!.Ticker);
             Assert.Null(_dto.Company);
             Assert.Equal("Added", _dto.ChangeType);
             Assert.Equal(0, _dto.OldShares);
@@ -137,13 +137,13 @@ public class HoldingChangeDtoMapperTests
         }
 
         private static HoldingChange HoldingChange(
-            string? ticker,
-            string? company,
-            ChangeType type,
-            int oldShares,
-            int newShares,
-            decimal oldWeight,
-            decimal newWeight)
+            string ticker = "ARK",
+            string company = "Ark",
+            ChangeType type = ChangeType.Modified,
+            int oldShares = 50,
+            int newShares = 100,
+            decimal oldWeight = 5m,
+            decimal newWeight = 10m)
         {
             return new HoldingChange
             {
