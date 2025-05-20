@@ -1,9 +1,9 @@
 ﻿using PV260.Project.Components.ReportComponent.DTOs;
 using PV260.Project.Components.ReportComponent.Mappers;
 using PV260.Project.Domain.Models;
-using PV260.Project.Tests.Builders;
 
 namespace PV260.Project.Tests.Components.ReportComponent;
+
 public class HoldingChangeDtoMapperTests
 {
     [Fact]
@@ -51,10 +51,7 @@ public class HoldingChangeDtoMapperTests
 
         public When WithHoldingChange(ChangeType type, int oldShares, int newShares)
         {
-            _change = new HoldingChangeBuilder()
-                .WithType(type)
-                .WithShares(oldShares, newShares)
-                .Build();
+            _change = HoldingChange("ARKK", "ARK Invest", type, oldShares, newShares, 10, 20);
             return this;
         }
 
@@ -62,8 +59,8 @@ public class HoldingChangeDtoMapperTests
         {
             _list = new List<HoldingChange>
             {
-                new HoldingChangeBuilder().WithType(ChangeType.Added).WithShares(0, 100).Build(),
-                new HoldingChangeBuilder().WithType(ChangeType.Removed).WithShares(100, 0).Build()
+                HoldingChange("TSLA", "Tesla", ChangeType.Added, 0, 100, 0, 5),
+                HoldingChange("ZM", "Zoom", ChangeType.Removed, 100, 0, 4.5m, 0)
             };
             return this;
         }
@@ -137,6 +134,27 @@ public class HoldingChangeDtoMapperTests
             Assert.Equal(0, _dto.OldWeight);
             Assert.Equal(5.5m, _dto.NewWeight);
             return this;
+        }
+
+        private static HoldingChange HoldingChange(
+            string? ticker,
+            string? company,
+            ChangeType type,
+            int oldShares,
+            int newShares,
+            decimal oldWeight,
+            decimal newWeight)
+        {
+            return new HoldingChange
+            {
+                Ticker = ticker,
+                Company = company,
+                ChangeType = type,
+                OldShares = oldShares,
+                NewShares = newShares,
+                OldWeight = oldWeight,
+                NewWeight = newWeight
+            };
         }
     }
 }

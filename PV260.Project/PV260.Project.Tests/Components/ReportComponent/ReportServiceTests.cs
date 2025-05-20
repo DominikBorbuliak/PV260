@@ -4,7 +4,6 @@ using PV260.Project.Domain.Interfaces.ArkFunds;
 using PV260.Project.Domain.Interfaces.Email;
 using PV260.Project.Domain.Interfaces.Persistence;
 using PV260.Project.Domain.Models;
-using PV260.Project.Tests.Builders;
 
 namespace PV260.Project.Tests.Components.ReportComponent;
 
@@ -14,8 +13,8 @@ public class ReportServiceTests
     public async Task GenerateAndNotifyAsync_ShouldSendEmail_WhenThereAreChanges()
     {
         var scenario = await new When()
-            .WithOldHolding(new ArkFundsHoldingBuilder().WithShares(50).Build())
-            .WithNewHolding(new ArkFundsHoldingBuilder().WithShares(100).Build())
+            .WithOldHolding(When.Holding("ARK", 50))
+            .WithNewHolding(When.Holding("ARK", 100))
             .WithSubscribedEmails("user@example.com")
             .RunGenerateAndNotify();
 
@@ -47,7 +46,7 @@ public class ReportServiceTests
     public async Task GenerateAndNotifyAsync_ShouldDetectAddedHolding()
     {
         var scenario = await new When()
-            .WithNewHolding(new ArkFundsHoldingBuilder().WithTicker("NEW").Build())
+            .WithNewHolding(When.Holding("NEW"))
             .WithSubscribedEmails("user@example.com")
             .RunGenerateAndNotify();
 
@@ -58,7 +57,7 @@ public class ReportServiceTests
     public async Task GenerateAndNotifyAsync_ShouldDetectRemovedHolding()
     {
         var scenario = await new When()
-            .WithOldHolding(new ArkFundsHoldingBuilder().WithTicker("REMOVE").Build())
+            .WithOldHolding(When.Holding("REMOVE"))
             .WithSubscribedEmails("user@example.com")
             .RunGenerateAndNotify();
 
@@ -68,7 +67,7 @@ public class ReportServiceTests
     [Fact]
     public async Task GenerateAndNotifyAsync_ShouldDetectNoChanges()
     {
-        var holding = new ArkFundsHoldingBuilder().Build();
+        var holding = When.Holding("UNCHANGED", 100, 10.5m);
 
         var scenario = await new When()
             .WithOldHolding(holding)
@@ -82,7 +81,7 @@ public class ReportServiceTests
     [Fact]
     public async Task GetClosestPreviousReportDiffAsync_ShouldReturnLatest_WhenNoDateGiven()
     {
-        var changes = new[] { new HoldingChangeBuilder().Build() };
+        var changes = new[] { When.Change() };
 
         var scenario = await new When()
             .WithReportDiff(changes)
@@ -95,7 +94,7 @@ public class ReportServiceTests
     public async Task GetClosestPreviousReportDiffAsync_ShouldReturnFromDate()
     {
         var date = DateTime.UtcNow;
-        var changes = new[] { new HoldingChangeBuilder().Build() };
+        var changes = new[] { When.Change() };
 
         var scenario = await new When()
             .WithReportDiffFromDate(date, changes)
@@ -103,6 +102,7 @@ public class ReportServiceTests
 
         scenario.ThenDiffShouldMatch(changes);
     }
+
 
     [Fact]
     public async Task GetClosestPreviousReportDiffAsync_ShouldReturnEmpty_WhenNull()
@@ -119,11 +119,11 @@ public class ReportServiceTests
     {
         new When()
             .WithOldHolding(
-                new ArkFundsHoldingBuilder().WithTicker(null!).Build(),
-                new ArkFundsHoldingBuilder().WithTicker("  ").Build())
+                When.Holding(null!),
+                When.Holding("  "))
             .WithNewHolding(
-                new ArkFundsHoldingBuilder().WithTicker("").Build(),
-                new ArkFundsHoldingBuilder().WithTicker("VALID").WithShares(10).Build())
+                When.Holding(""),
+                When.Holding("VALID", 10))
             .RunCreateDiff()
             .ThenChangesShouldHaveTickers("VALID");
     }
@@ -131,12 +131,9 @@ public class ReportServiceTests
     [Fact]
     public void CreateReportDiff_ShouldSetCorrectOldValues_WhenModified()
     {
-        var old = new ArkFundsHoldingBuilder().WithTicker("MOD").WithShares(100).WithWeight(15m).Build();
-        var updated = new ArkFundsHoldingBuilder().WithTicker("MOD").WithShares(150).WithWeight(20m).Build();
-
         new When()
-            .WithOldHolding(old)
-            .WithNewHolding(updated)
+            .WithOldHolding(When.Holding("MOD", 100, 15m))
+            .WithNewHolding(When.Holding("MOD", 150, 20m))
             .RunCreateDiff()
             .ThenShouldContainChange("MOD", ChangeType.Modified, 100, 150, 15m, 20m);
     }
@@ -156,11 +153,11 @@ public class ReportServiceTests
     {
         new When()
             .WithOldHolding(
-                new ArkFundsHoldingBuilder().WithTicker(null!).Build(),
-                new ArkFundsHoldingBuilder().WithTicker(" ").Build())
+                When.Holding(null!),
+                When.Holding(" "))
             .WithNewHolding(
-                new ArkFundsHoldingBuilder().WithTicker("").Build(),
-                new ArkFundsHoldingBuilder().WithTicker("VALID").WithShares(10).Build())
+                When.Holding(""),
+                When.Holding("VALID", 10))
             .RunCreateDiff()
             .ThenChangesShouldHaveTickers("VALID");
     }
@@ -168,15 +165,13 @@ public class ReportServiceTests
     [Fact]
     public void CreateReportDiff_ShouldSetCorrectOldAndNewValues_WhenModified()
     {
-        var old = new ArkFundsHoldingBuilder().WithTicker("MOD").WithShares(100).WithWeight(15.5m).Build();
-        var updated = new ArkFundsHoldingBuilder().WithTicker("MOD").WithShares(200).WithWeight(20m).Build();
-
         new When()
-            .WithOldHolding(old)
-            .WithNewHolding(updated)
+            .WithOldHolding(When.Holding("MOD", 100, 15.5m))
+            .WithNewHolding(When.Holding("MOD", 200, 20m))
             .RunCreateDiff()
             .ThenShouldContainChange("MOD", ChangeType.Modified, 100, 200, 15.5m, 20m);
     }
+
 
     [Fact]
     public void CreateReportDiff_ShouldHandleCompletelyEmptyReports()
@@ -193,6 +188,7 @@ public class ReportServiceTests
         private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
         private readonly Mock<IArkFundsApiRepository> _apiRepoMock = new();
         private readonly Mock<IEmailSender> _emailSenderMock = new();
+
         private IList<ArkFundsHolding> _oldHoldings = new List<ArkFundsHolding>();
         private IList<ArkFundsHolding> _newHoldings = new List<ArkFundsHolding>();
         private IList<string> _emails = new List<string>();
@@ -207,13 +203,17 @@ public class ReportServiceTests
         public When WithOldHolding(params ArkFundsHolding[] holdings)
         {
             _oldHoldings = holdings.ToList();
-            _report = new ReportBuilder().WithHoldings(_oldHoldings.ToArray()).Build();
+            _report = new Report
+            {
+                Holdings = _oldHoldings,
+                Diff = []
+            };
             return this;
         }
 
         public When WithNewHolding(params ArkFundsHolding[] holdings)
         {
-            _newHoldings = holdings.Any() ? holdings.ToList() : new List<ArkFundsHolding>();
+            _newHoldings = holdings.Any() ? holdings.ToList() : [];
             return this;
         }
 
@@ -231,7 +231,11 @@ public class ReportServiceTests
 
         public When WithReportDiff(HoldingChange[] changes)
         {
-            _report = new ReportBuilder().WithDiff(changes).Build();
+            _report = new Report
+            {
+                Holdings = [],
+                Diff = changes.ToList()
+            };
 
             _unitOfWorkMock.Setup(u => u.ReportRepository.GetLatestReportAsync())
                 .ReturnsAsync(_report);
@@ -242,8 +246,13 @@ public class ReportServiceTests
         public When WithReportDiffFromDate(DateTime date, HoldingChange[] changes)
         {
             _date = date;
-            _unitOfWorkMock.Setup(u => u.ReportRepository.GetClosestPreviousReportAsync(date)).ReturnsAsync(
-                new ReportBuilder().WithDiff(changes).Build());
+            var report = new Report
+            {
+                Holdings = [],
+                Diff = changes.ToList()
+            };
+
+            _unitOfWorkMock.Setup(u => u.ReportRepository.GetClosestPreviousReportAsync(date)).ReturnsAsync(report);
             return this;
         }
 
@@ -281,6 +290,12 @@ public class ReportServiceTests
         {
             _service = new ReportService(_unitOfWorkMock.Object, _apiRepoMock.Object, _emailSenderMock.Object);
             _resultDiff = (await _service.GetClosestPreviousReportDiffAsync(date)).ToList();
+            return this;
+        }
+
+        public When RunCreateDiff()
+        {
+            _diff = ReportService.CreateReportDiff(_oldHoldings, _newHoldings);
             return this;
         }
 
@@ -354,11 +369,6 @@ public class ReportServiceTests
             Assert.Equal(newWeight, change.NewWeight);
             return this;
         }
-        public When RunCreateDiff()
-        {
-            _diff = ReportService.CreateReportDiff(_oldHoldings, _newHoldings);
-            return this;
-        }
 
         private void SetupMocks()
         {
@@ -378,6 +388,37 @@ public class ReportServiceTests
             }
 
             _apiRepoMock.Setup(a => a.GetCurrentHoldingsAsync()).ReturnsAsync(_newHoldings);
+        }
+
+        public static ArkFundsHolding Holding(string ticker, int shares = 100, decimal weight = 10.5m)
+        {
+            return new ArkFundsHolding
+            {
+                Ticker = ticker,
+                Company = "ARK Investments",
+                Shares = shares,
+                Weight = weight
+            };
+        }
+
+        public static HoldingChange Change(
+            string ticker = "ARK",
+            ChangeType type = ChangeType.Modified,
+            int oldShares = 50,
+            int newShares = 100,
+            decimal oldWeight = 5m,
+            decimal newWeight = 10m)
+        {
+            return new HoldingChange
+            {
+                Ticker = ticker,
+                Company = "ARK Investments",
+                ChangeType = type,
+                OldShares = oldShares,
+                NewShares = newShares,
+                OldWeight = oldWeight,
+                NewWeight = newWeight
+            };
         }
     }
 }
