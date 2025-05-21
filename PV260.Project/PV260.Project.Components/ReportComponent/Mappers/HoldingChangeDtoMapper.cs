@@ -3,7 +3,7 @@ using PV260.Project.Domain.Models;
 
 namespace PV260.Project.Components.ReportComponent.Mappers;
 
-internal static class HoldingChangeDtoMapper
+public static class HoldingChangeDtoMapper
 {
     public static HoldingChangeDto ToDto(this HoldingChange source)
     {
