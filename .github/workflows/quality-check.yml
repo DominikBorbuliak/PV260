@@ -1,12 +1,12 @@
 name: Quality check
 
 env:
-  DOTNET_VERSION: '9'
-  NODE_VERSION: '20'
+  DOTNET_VERSION: "9"
+  NODE_VERSION: "20"
 
 on:
   pull_request:
-    branches: [ "dev" ]
+    branches: ["dev"]
 
 permissions:
   contents: read
@@ -35,9 +35,12 @@ jobs:
       - name: dotnet build
         run: dotnet build ./PV260.Project/PV260.Project.sln --configuration Release
 
+      - name: dotnet test
+        run: dotnet test ./PV260.Project/PV260.Project.sln --configuration Release --no-build
+
   frontend:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -49,13 +52,12 @@ jobs:
 
       - name: npm install
         run: npm install
-        working-directory: './PV260.Project/pv260.project.client'
+        working-directory: "./PV260.Project/pv260.project.client"
 
       - name: npm run lint
         run: npm run lint
-        working-directory: './PV260.Project/pv260.project.client'
+        working-directory: "./PV260.Project/pv260.project.client"
 
       - name: npm run build
         run: npm run build
-        working-directory: './PV260.Project/pv260.project.client'
-        
+        working-directory: "./PV260.Project/pv260.project.client"
