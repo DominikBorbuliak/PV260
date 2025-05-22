@@ -1,4 +1,4 @@
-﻿namespace PV260.Project.Components.ReportsComponent.DTOs;
+﻿namespace PV260.Project.Components.ReportComponent.DTOs;
 
 public class HoldingChangeDto
 {

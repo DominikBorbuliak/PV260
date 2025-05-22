@@ -6,7 +6,7 @@ using PV260.Project.Domain.Interfaces.Persistence;
 using PV260.Project.Domain.Models;
 using System.Text;
 
-namespace PV260.Project.Components.ReportsComponent.Services;
+namespace PV260.Project.Components.ReportComponent.Services;
 
 public class ReportService : IReportService
 {
@@ -73,7 +73,7 @@ public class ReportService : IReportService
         return report?.Diff ?? [];
     }
 
-    private static ReportDiff CreateReportDiff(IList<ArkFundsHolding> oldReport, IList<ArkFundsHolding> newReport)
+    public static ReportDiff CreateReportDiff(IList<ArkFundsHolding> oldReport, IList<ArkFundsHolding> newReport)
     {
         var diff = new ReportDiff();
 

@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace PV260.Project.Components.UsersComponent.Extensions;
 
-internal static class ClaimsPrincipalExtensions
+public static class ClaimsPrincipalExtensions
 {
     public static string GetEmail(this ClaimsPrincipal claimsPrincipal)
     {
